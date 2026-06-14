@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Become a Driver — DevgharCabs | Earn More in Devghar</title>
+  <meta name="description" content="Join DevgharCabs as a verified driver in Devghar. Regular rides from Jasidih Station, earn more during Shrawan, easy WhatsApp ride management. Apply now." />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .driver-page { padding-top: 88px; min-height: 100vh; background: radial-gradient(ellipse at 50% 0%, #200800 0%, #0A0300 70%); }
+    .driver-hero { padding: 60px 20px 40px; text-align: center; }
+    .driver-hero h1 { font-size: clamp(30px, 5vw, 54px); font-weight: 900; margin-bottom: 14px; }
+    .driver-hero h1 span { color: var(--gold); }
+    .driver-hero p { color: rgba(255,248,240,0.7); font-size: 17px; max-width: 560px; margin: 0 auto; line-height: 1.7; }
+
+    .driver-content { max-width: 1100px; margin: 0 auto; padding: 40px 20px 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    @media(max-width:768px) { .driver-content { grid-template-columns: 1fr; } }
+
+    /* PERKS */
+    .perks-list { display: flex; flex-direction: column; gap: 20px; }
+    .perk-item { display: flex; gap: 16px; align-items: flex-start; }
+    .perk-icon { width: 52px; height: 52px; border-radius: var(--radius-md); background: linear-gradient(135deg, rgba(255,107,0,0.2), rgba(245,200,66,0.1)); border: 1px solid rgba(245,200,66,0.25); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .perk-body { flex: 1; }
+    .perk-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .perk-desc { font-size: 14px; color: rgba(255,248,240,0.62); line-height: 1.6; }
+
+    /* EARNING TABLE */
+    .earning-table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; }
+    .earning-table th { background: rgba(245,200,66,0.12); color: var(--gold); padding: 10px 14px; text-align: left; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+    .earning-table td { padding: 11px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); color: rgba(255,248,240,0.8); }
+    .earning-table tr:last-child td { border-bottom: none; }
+    .earning-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .earn-highlight { color: var(--gold); font-weight: 700; }
+
+    /* REGISTRATION FORM */
+    .reg-form { background: linear-gradient(135deg, rgba(255,107,0,0.08), rgba(245,200,66,0.04)); border: 1px solid rgba(245,200,66,0.22); border-radius: var(--radius-lg); padding: 36px; }
+    .reg-form h2 { font-size: 22px; font-weight: 800; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+    .reg-form h2 span { color: var(--gold); }
+
+    /* SUCCESS STATE */
+    .driver-success { display: none; text-align: center; padding: 40px 20px; }
+    .driver-success.show { display: block; animation: bounce-in 0.6s ease; }
+
+    /* STEP PROCESS */
+    .onboard-steps { display: flex; flex-direction: column; gap: 0; margin-top: 40px; }
+    .onboard-step { display: flex; gap: 16px; padding-bottom: 24px; position: relative; }
+    .onboard-step::before { content:''; position:absolute; left:20px; top:44px; width:2px; bottom:0; background:rgba(245,200,66,0.15); }
+    .onboard-step:last-child::before { display: none; }
+    .onboard-circle { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, rgba(255,107,0,0.2), rgba(245,200,66,0.1)); border: 2px solid rgba(245,200,66,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; color: var(--gold); flex-shrink: 0; }
+    .onboard-body { flex: 1; padding-top: 8px; }
+    .onboard-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .onboard-desc { font-size: 13px; color: rgba(255,248,240,0.6); line-height: 1.6; }
+  </style>
+</head>
+<body>
+<div id="page-loader"><div class="loader-om">ॐ</div><div class="loader-bar"><div class="loader-progress"></div></div></div>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-om">ॐ</div>
+    <div class="nav-brand-text">
+      <div class="nav-brand-name">Devghar<span>Cabs</span></div>
+      <div class="nav-brand-sub">Baidyanath Dham</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link"><span class="en">Home</span><span class="hi">होम</span></a>
+    <a href="booking.html" class="nav-link"><span class="en">Book a Cab</span><span class="hi">कैब बुक करें</span></a>
+    <button class="lang-toggle" onclick="toggleLang()">हिंदी</button>
+  </div>
+  <div class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html" class="nav-link">🏠 <span class="en">Home</span><span class="hi">होम</span></a>
+  <a href="booking.html" class="nav-link">🚕 <span class="en">Book a Cab</span><span class="hi">कैब बुक करें</span></a>
+  <button class="lang-toggle" onclick="toggleLang()" style="align-self:flex-start">हिंदी</button>
+</div>
+
+<div class="driver-page">
+  <div class="driver-hero">
+    <div class="badge badge-gold" style="margin-bottom:16px;">🚗 <span class="en">Driver Partner Program</span><span class="hi">ड्राइवर पार्टनर प्रोग्राम</span></div>
+    <h1><span class="en">Earn More with <span>DevgharCabs</span></span><span class="hi"><span>DevgharCabs</span> के साथ अधिक कमाएं</span></h1>
+    <p><span class="en">Join Jharkhand's most trusted pilgrim cab network. Get regular rides from Jasidih Station, easy WhatsApp management, and earn more during Shrawan season.</span><span class="hi">झारखंड के सबसे भरोसेमंद तीर्थयात्री कैब नेटवर्क में शामिल हों। जसीडीह स्टेशन से नियमित सवारी और श्रावण में अधिक कमाई।</span></p>
+  </div>
+
+  <div class="driver-content">
+    <!-- LEFT: PERKS -->
+    <div>
+      <div class="section-label"><span class="en">Why Drive With Us</span><span class="hi">हमारे साथ ड्राइव क्यों करें</span></div>
+      <h2 style="font-size:26px;font-weight:800;margin-bottom:28px;"><span class="en">Benefits of <span class="text-gold">Joining DevgharCabs</span></span><span class="hi"><span class="text-gold">DevgharCabs</span> से जुड़ने के फायदे</span></h2>
+
+      <div class="perks-list">
+        <div class="perk-item">
+          <div class="perk-icon">📱</div>
+          <div class="perk-body">
+            <div class="perk-title"><span class="en">Accept Rides on WhatsApp</span><span class="hi">WhatsApp पर सवारी स्वीकार करें</span></div>
+            <div class="perk-desc"><span class="en">No complex app to learn. Receive ride requests on WhatsApp and simply reply YES or NO. Works on any basic smartphone.</span><span class="hi">कोई जटिल ऐप नहीं सीखना। WhatsApp पर सवारी अनुरोध प्राप्त करें और बस YES या NO जवाब दें।</span></div>
+          </div>
+        </div>
+        <div class="perk-item">
+          <div class="perk-icon">💰</div>
+          <div class="perk-body">
+            <div class="perk-title"><span class="en">Cash Payment Directly to You</span><span class="hi">सीधे आपको नकद भुगतान</span></div>
+            <div class="perk-desc"><span class="en">Passenger pays you cash directly at the destination. No waiting for weekly payouts. Instant earnings every trip.</span><span class="hi">यात्री सीधे आपको गंतव्य पर नकद देता है। साप्ताहिक भुगतान का इंतजार नहीं। हर यात्रा में तुरंत कमाई।</span></div>
+          </div>
+        </div>
+        <div class="perk-item">
+          <div class="perk-icon">🔱</div>
+          <div class="perk-body">
+            <div class="perk-title"><span class="en">Shrawan Season Surge</span><span class="hi">श्रावण सीजन में बंपर कमाई</span></div>
+            <div class="perk-desc"><span class="en">During Shrawan (July–August), millions of pilgrims visit Baidyanath Dham. Earn significantly more with surge pricing during peak pilgrim season.</span><span class="hi">श्रावण में लाखों तीर्थयात्री बैद्यनाथ धाम आते हैं। पीक सीजन में अधिक कमाई करें।</span></div>
+          </div>
+        </div>
+        <div class="perk-item">
+          <div class="perk-icon">🆓</div>
+          <div class="perk-body">
+            <div class="perk-title"><span class="en">Free Listing for 3 Months</span><span class="hi">3 महीने मुफ्त लिस्टिंग</span></div>
+            <div class="perk-desc"><span class="en">No joining fee. First 3 months listing is completely free. After that, only ₹299/month to stay active on the platform.</span><span class="hi">कोई जॉइनिंग फी नहीं। पहले 3 महीने पूरी तरह मुफ्त। उसके बाद केवल ₹299/माह।</span></div>
+          </div>
+        </div>
+        <div class="perk-item">
+          <div class="perk-icon">🙏</div>
+          <div class="perk-body">
+            <div class="perk-title"><span class="en">Raja Bhaiya's Personal Support</span><span class="hi">राजा भैया का व्यक्तिगत सहयोग</span></div>
+            <div class="perk-desc"><span class="en">Raja Bhaiya (Rajkumar Shukla Family) personally onboards and supports each driver. Call anytime for help.</span><span class="hi">राजा भैया (राजकुमार शुक्ला परिवार) व्यक्तिगत रूप से हर ड्राइवर का सहयोग करते हैं।</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EARNING TABLE -->
+      <h3 style="font-size:18px;font-weight:700;margin:36px 0 12px;"><span class="en">Estimated Monthly Earnings</span><span class="hi">अनुमानित मासिक कमाई</span></h3>
+      <table class="earning-table">
+        <thead><tr><th><span class="en">Vehicle</span><span class="hi">वाहन</span></th><th><span class="en">Avg. Trips/Day</span><span class="hi">औसत ट्रिप/दिन</span></th><th><span class="en">Monthly Est.</span><span class="hi">मासिक अनुमान</span></th></tr></thead>
+        <tbody>
+          <tr><td>🛺 Auto / E-Rickshaw</td><td>8–12</td><td class="earn-highlight">₹12,000–₹18,000</td></tr>
+          <tr><td>🚗 Sedan / Hatchback</td><td>5–8</td><td class="earn-highlight">₹18,000–₹28,000</td></tr>
+          <tr><td>🚙 SUV / Innova</td><td>4–6</td><td class="earn-highlight">₹22,000–₹40,000</td></tr>
+          <tr><td>🚐 Tempo Traveller</td><td>2–4</td><td class="earn-highlight">₹25,000–₹50,000</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:rgba(255,248,240,0.4);">* <span class="en">Estimates based on current route fares. Shrawan season earnings can be 40–60% higher.</span><span class="hi">वर्तमान रूट किराए के आधार पर अनुमान। श्रावण सीजन में 40–60% अधिक कमाई।</span></p>
+
+      <!-- ONBOARDING PROCESS -->
+      <h3 style="font-size:18px;font-weight:700;margin:36px 0 4px;"><span class="en">Onboarding Process</span><span class="hi">जुड़ने की प्रक्रिया</span></h3>
+      <div class="onboard-steps">
+        <div class="onboard-step"><div class="onboard-circle">1</div><div class="onboard-body"><div class="onboard-title"><span class="en">Submit Application</span><span class="hi">आवेदन जमा करें</span></div><div class="onboard-desc"><span class="en">Fill the form with your name, vehicle details, and license number.</span><span class="hi">अपना नाम, वाहन विवरण और लाइसेंस नंबर भरें।</span></div></div></div>
+        <div class="onboard-step"><div class="onboard-circle">2</div><div class="onboard-body"><div class="onboard-title"><span class="en">Raja Bhaiya Calls You</span><span class="hi">राजा भैया आपको कॉल करेंगे</span></div><div class="onboard-desc"><span class="en">Within 24 hours, Raja Bhaiya will call to verify your documents (license, RC, Aadhaar) and schedule a quick in-person verification.</span><span class="hi">24 घंटे के भीतर, राजा भैया आपके दस्तावेज सत्यापित करने के लिए कॉल करेंगे।</span></div></div></div>
+        <div class="onboard-step"><div class="onboard-circle">3</div><div class="onboard-body"><div class="onboard-title"><span class="en">Get Added to WhatsApp Group</span><span class="hi">WhatsApp ग्रुप में जोड़े जाएं</span></div><div class="onboard-desc"><span class="en">Once verified, you're added to the DevgharCabs driver WhatsApp group and start receiving ride requests.</span><span class="hi">सत्यापित होने के बाद, आप DevgharCabs ड्राइवर WhatsApp ग्रुप में जोड़े जाते हैं।</span></div></div></div>
+        <div class="onboard-step"><div class="onboard-circle">4</div><div class="onboard-body"><div class="onboard-title"><span class="en">Start Earning!</span><span class="hi">कमाई शुरू करें!</span></div><div class="onboard-desc"><span class="en">Accept rides, complete trips, collect cash. It's that simple.</span><span class="hi">सवारी स्वीकार करें, यात्रा पूरी करें, नकद लें। इतना आसान है।</span></div></div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: REGISTRATION FORM -->
+    <div>
+      <div class="reg-form">
+        <h2>🚗 <span class="en">Apply to <span>Drive</span></span><span class="hi"><span>ड्राइव</span> करने के लिए आवेदन करें</span></h2>
+        <div id="driver-form-container">
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label" for="d-name">👤 <span class="en">Full Name</span><span class="hi">पूरा नाम</span> *</label>
+            <input class="form-input" type="text" id="d-name" placeholder="Your full name" autocomplete="name" />
+          </div>
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label" for="d-phone">📱 <span class="en">Mobile Number (WhatsApp)</span><span class="hi">मोबाइल नंबर (WhatsApp)</span> *</label>
+            <div class="phone-row">
+              <input class="form-input phone-prefix" type="text" value="+91" readonly />
+              <input class="form-input" type="tel" id="d-phone" placeholder="10-digit WhatsApp number" maxlength="10" inputmode="numeric" />
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label" for="d-vehicle">🚗 <span class="en">Vehicle Type</span><span class="hi">वाहन प्रकार</span> *</label>
+            <select class="form-select" id="d-vehicle">
+              <option value="">— <span class="en">Select vehicle</span> —</option>
+              <option value="Auto / E-Rickshaw">🛺 Auto / E-Rickshaw</option>
+              <option value="Hatchback / Sedan">🚗 Hatchback / Sedan (Maruti, Hyundai etc.)</option>
+              <option value="SUV / Innova / Ertiga">🚙 SUV / Innova / Ertiga</option>
+              <option value="Tempo Traveller">🚐 Tempo Traveller / Winger</option>
+            </select>
+          </div>
+          <div class="form-row" style="margin-bottom:16px">
+            <div class="form-group">
+              <label class="form-label" for="d-license">🪪 <span class="en">Driving License No.</span><span class="hi">ड्राइविंग लाइसेंस नंबर</span></label>
+              <input class="form-input" type="text" id="d-license" placeholder="e.g. JH0120XXXXXXXX" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="d-rc">📋 <span class="en">Vehicle RC No.</span><span class="hi">RC नंबर</span></label>
+              <input class="form-input" type="text" id="d-rc" placeholder="e.g. JH01AB1234" />
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label" for="d-area">📍 <span class="en">Your Area / Base Location</span><span class="hi">आपका क्षेत्र / आधार स्थान</span></label>
+            <select class="form-select" id="d-area">
+              <option value="">— <span class="en">Select area</span> —</option>
+              <option>Jasidih</option><option>Deoghar City</option><option>Baidyanath Dham</option>
+              <option>Dumka</option><option>Giridih</option><option>Other in Jharkhand</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:20px">
+            <label class="form-label" for="d-exp">📅 <span class="en">Years of Driving Experience</span><span class="hi">ड्राइविंग अनुभव (वर्ष)</span></label>
+            <select class="form-select" id="d-exp">
+              <option value="1-2">1–2 years</option><option value="3-5">3–5 years</option>
+              <option value="5-10">5–10 years</option><option value="10+">10+ years</option>
+            </select>
+          </div>
+          <div style="background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:var(--radius-md);padding:14px;margin-bottom:20px;font-size:13px;color:rgba(255,248,240,0.7);line-height:1.6;">
+            ✅ <span class="en">By applying, you agree to share your details with Raja Bhaiya for verification. Documents required: Valid DL, RC Book, Aadhaar copy.</span>
+            <span class="hi">आवेदन करके, आप सत्यापन के लिए राजा भैया के साथ अपनी जानकारी साझा करने से सहमत हैं।</span>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="submitDriverApplication()">
+            🚗 <span class="en">Submit Application — Free</span><span class="hi">आवेदन जमा करें — मुफ्त</span>
+          </button>
+          <p style="text-align:center;margin-top:12px;font-size:12px;color:rgba(255,248,240,0.4);">
+            <span class="en">Or WhatsApp Raja Bhaiya directly:</span><span class="hi">या सीधे राजा भैया को WhatsApp करें:</span>
+            <a href="https://wa.me/917643081977?text=Namaste%20Raja%20Bhaiya!%20I%20want%20to%20register%20as%20a%20driver%20for%20DevgharCabs%20%F0%9F%9A%97" target="_blank" style="color:var(--gold);font-weight:700;display:block;margin-top:4px;">+91 76430 81977 💬</a>
+          </p>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="driver-success" id="driver-success">
+          <div style="font-size:64px;margin-bottom:16px;">🎉</div>
+          <h3 style="font-size:22px;font-weight:800;margin-bottom:8px;"><span class="en">Application Submitted!</span><span class="hi">आवेदन जमा!</span></h3>
+          <p style="color:rgba(255,248,240,0.7);line-height:1.7;margin-bottom:20px;">
+            <span class="en">Raja Bhaiya will call you within 24 hours to verify your documents and complete onboarding. Keep your WhatsApp active!</span>
+            <span class="hi">राजा भैया 24 घंटे के भीतर आपसे संपर्क करेंगे। अपना WhatsApp चालू रखें!</span>
+          </p>
+          <a class="btn btn-gold" href="https://wa.me/917643081977?text=Namaste%20Raja%20Bhaiya!%20I%20just%20applied%20to%20be%20a%20driver%20on%20DevgharCabs.%20Please%20verify%20me.%20%F0%9F%99%8F" target="_blank">
+            💬 <span class="en">Message Raja Bhaiya Now</span><span class="hi">राजा भैया को मैसेज करें</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<a class="wa-fab" href="https://wa.me/917643081977?text=Namaste%20Raja%20Bhaiya!%20I%20want%20to%20register%20as%20a%20DevgharCabs%20driver%20%F0%9F%9A%97" target="_blank">
+  <div class="wa-tooltip"><span class="en">Chat with Raja Bhaiya</span><span class="hi">राजा भैया से बात करें</span></div>
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+<div id="toast-container"></div>
+<script src="js/main.js"></script>
+<script>
+function submitDriverApplication() {
+  const name = document.getElementById('d-name').value.trim();
+  const phone = document.getElementById('d-phone').value.trim();
+  const vehicle = document.getElementById('d-vehicle').value;
+  const license = document.getElementById('d-license').value.trim();
+  const area = document.getElementById('d-area').value;
+  if (!name || name.length < 2) { showToast('Required', 'Please enter your full name', 'error'); return; }
+  if (!phone || phone.length < 10 || !/^\d{10}$/.test(phone)) { showToast('Invalid', 'Please enter valid 10-digit mobile number', 'error'); return; }
+  if (!vehicle) { showToast('Required', 'Please select your vehicle type', 'error'); return; }
+  const driver = DB.saveDriver({ name, phone, vehicle, license, rc: document.getElementById('d-rc').value, area, exp: document.getElementById('d-exp').value });
+  if (!driver) { showToast('Already Applied', 'This mobile number has already been registered', 'warning'); return; }
+  // Send to Raja Bhaiya via WhatsApp
+  setTimeout(() => window.open(WA.driverAlert(driver), '_blank'), 800);
+  document.getElementById('driver-form-container').style.display = 'none';
+  document.getElementById('driver-success').classList.add('show');
+  showToast('Application Submitted! 🎉', 'Raja Bhaiya will contact you within 24 hours', 'success', 6000);
+}
+</script>
+</body>
+</html>

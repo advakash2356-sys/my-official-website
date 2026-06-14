@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a Cab — DevgharCabs | Baidyanath Dham, Devghar</title>
+  <meta name="description" content="Book a cab for Baidyanath Dham in 3 easy steps. Pick your route, date and enter your number. No app needed. Cash on arrival." />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .booking-page { padding-top: 88px; min-height: 100vh; background: radial-gradient(ellipse at 50% 0%, #2C0D00 0%, #0D0500 60%); }
+    .booking-header { text-align: center; padding: 48px 20px 0; }
+    .booking-header h1 { font-size: clamp(28px, 4vw, 46px); font-weight: 900; margin-bottom: 8px; }
+    .booking-header h1 span { color: var(--gold); }
+    .booking-header p { color: rgba(255,248,240,0.65); font-size: 15px; }
+
+    .booking-wrapper { max-width: 760px; margin: 40px auto; padding: 0 20px 80px; }
+
+    /* PROGRESS BAR */
+    .booking-progress-bar {
+      height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; margin-bottom: 40px; overflow: hidden;
+    }
+    .booking-progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--saffron), var(--gold));
+      border-radius: 4px; transition: width 0.5s ease;
+    }
+
+    /* STEP INDICATORS */
+    .step-indicators { display: flex; gap: 0; margin-bottom: 36px; }
+    .step-indicator {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px; cursor: pointer; border-radius: 0;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(245,200,66,0.12);
+      border-right: none; color: rgba(255,248,240,0.4); font-size: 13px; font-weight: 600;
+      transition: all 0.3s;
+    }
+    .step-indicator:first-child { border-radius: var(--radius-md) 0 0 var(--radius-md); }
+    .step-indicator:last-child { border-radius: 0 var(--radius-md) var(--radius-md) 0; border-right: 1px solid rgba(245,200,66,0.12); }
+    .step-indicator.active { background: linear-gradient(135deg, rgba(255,107,0,0.2), rgba(245,200,66,0.1)); color: var(--gold); border-color: rgba(245,200,66,0.3); }
+    .step-indicator.done { background: rgba(34,197,94,0.08); color: rgba(34,197,94,0.8); border-color: rgba(34,197,94,0.2); }
+    .step-indicator-num {
+      width: 26px; height: 26px; border-radius: 50%; font-size: 12px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(245,200,66,0.15); border: 1px solid rgba(245,200,66,0.3); color: var(--gold);
+    }
+    .step-indicator.active .step-indicator-num { background: var(--gold); color: var(--dark-bg); border-color: var(--gold); }
+    .step-indicator.done .step-indicator-num { background: var(--success); color: white; border-color: var(--success); }
+    .step-indicator .step-label { display: none; }
+    @media(min-width:540px) { .step-indicator .step-label { display: inline; } }
+
+    /* BOOKING PANELS */
+    .booking-panel { display: none; animation: slide-up 0.4s ease; }
+    .booking-panel.active { display: block; }
+    .panel-card {
+      background: linear-gradient(135deg, rgba(255,107,0,0.07), rgba(245,200,66,0.04));
+      border: 1px solid rgba(245,200,66,0.22); border-radius: var(--radius-lg); padding: 36px;
+    }
+    .panel-title { font-size: 20px; font-weight: 800; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+    .panel-title-icon { font-size: 24px; }
+
+    /* VEHICLE GRID */
+    #vehicle-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 4px; }
+    @media(min-width: 560px) { #vehicle-grid { grid-template-columns: repeat(4, 1fr); } }
+    .vehicle-card { cursor: pointer; display: block; }
+    .vehicle-card input { display: none; }
+    .vehicle-card-inner {
+      background: rgba(255,255,255,0.04); border: 2px solid rgba(245,200,66,0.15);
+      border-radius: var(--radius-md); padding: 16px 12px; text-align: center;
+      transition: all 0.25s;
+    }
+    .vehicle-card:hover .vehicle-card-inner { border-color: rgba(245,200,66,0.4); background: rgba(255,107,0,0.08); }
+    .vehicle-card.selected .vehicle-card-inner { border-color: var(--gold); background: rgba(245,200,66,0.12); box-shadow: 0 0 0 3px rgba(245,200,66,0.12); }
+    .vehicle-icon { font-size: 28px; margin-bottom: 8px; }
+    .vehicle-name { font-size: 12px; font-weight: 700; color: var(--cream); }
+    .vehicle-desc { font-size: 11px; color: rgba(255,248,240,0.5); margin-top: 3px; }
+
+    /* QUICK ROUTES */
+    .quick-routes { margin-bottom: 24px; }
+    .quick-routes-label { font-size: 12px; color: rgba(255,248,240,0.45); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+    .route-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .route-chip {
+      background: rgba(255,107,0,0.12); border: 1px solid rgba(255,107,0,0.25);
+      color: rgba(255,248,240,0.8); padding: 7px 14px; border-radius: var(--radius-pill);
+      font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.25s;
+      white-space: nowrap;
+    }
+    .route-chip:hover { background: rgba(255,107,0,0.28); border-color: var(--saffron); color: white; }
+
+    /* FARE PREVIEW */
+    #fare-preview {
+      display: none; background: rgba(245,200,66,0.1); border: 1px solid rgba(245,200,66,0.3);
+      border-radius: var(--radius-md); padding: 18px; margin-top: 20px; text-align: center;
+    }
+    #fare-preview.show { display: block; animation: slide-up 0.3s ease; }
+    .fare-label { font-size: 12px; color: rgba(255,248,240,0.55); margin-bottom: 4px; }
+    #fare-amount { font-size: 32px; font-weight: 900; color: var(--gold); }
+    .fare-note { font-size: 12px; color: rgba(255,248,240,0.5); margin-top: 6px; }
+
+    /* FORM NAVIGATION */
+    .form-nav { display: flex; gap: 12px; margin-top: 28px; }
+    .form-nav .btn-back { min-width: 100px; }
+    .form-nav .btn-next { flex: 1; }
+
+    /* SUCCESS PANEL */
+    #panel-success {
+      display: none; text-align: center; padding: 48px 20px;
+      background: linear-gradient(135deg, rgba(34,197,94,0.08), rgba(245,200,66,0.05));
+      border: 1px solid rgba(34,197,94,0.2); border-radius: var(--radius-lg);
+      animation: bounce-in 0.6s ease;
+    }
+    #panel-success.active { display: block; }
+    .success-icon { font-size: 72px; margin-bottom: 20px; animation: bounce-in 0.6s ease; }
+    .success-title { font-size: 28px; font-weight: 900; margin-bottom: 12px; }
+    .booking-conf-id {
+      display: inline-block; background: rgba(245,200,66,0.15); border: 1px solid rgba(245,200,66,0.4);
+      border-radius: var(--radius-md); padding: 12px 28px; font-size: 22px; font-weight: 900;
+      color: var(--gold); letter-spacing: 4px; margin: 16px 0;
+    }
+    .conf-details { background: rgba(255,255,255,0.04); border-radius: var(--radius-md); padding: 20px; text-align: left; margin: 20px 0; }
+    .conf-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 14px; }
+    .conf-row:last-child { border-bottom: none; }
+    .conf-key { color: rgba(255,248,240,0.55); }
+    .conf-val { color: var(--cream); font-weight: 600; }
+    .wa-notice {
+      background: rgba(37,211,102,0.1); border: 1px solid rgba(37,211,102,0.25);
+      border-radius: var(--radius-md); padding: 14px; font-size: 13px; color: rgba(255,248,240,0.75);
+      line-height: 1.6; margin: 16px 0;
+    }
+
+    /* SIDEBAR INFO */
+    .booking-layout { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    @media(min-width: 900px) { .booking-layout { grid-template-columns: 1fr 300px; align-items: start; } }
+    .info-sidebar { display: flex; flex-direction: column; gap: 16px; }
+    .info-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 20px; }
+    .info-card-title { font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .info-item { font-size: 13px; color: rgba(255,248,240,0.7); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 8px; }
+    .info-item:last-child { border-bottom: none; }
+  </style>
+</head>
+<body>
+<div id="page-loader"><div class="loader-om">ॐ</div><div class="loader-bar"><div class="loader-progress"></div></div></div>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-om">ॐ</div>
+    <div class="nav-brand-text">
+      <div class="nav-brand-name">Devghar<span>Cabs</span></div>
+      <div class="nav-brand-sub">Baidyanath Dham</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link"><span class="en">Home</span><span class="hi">होम</span></a>
+    <a href="driver.html" class="nav-link"><span class="en">Drive With Us</span><span class="hi">ड्राइवर बनें</span></a>
+    <button class="lang-toggle" onclick="toggleLang()">हिंदी</button>
+    <a href="tel:+917643081977" class="nav-link nav-cta">📞 <span class="en">Call Us</span><span class="hi">कॉल करें</span></a>
+  </div>
+  <div class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html" class="nav-link">🏠 <span class="en">Home</span><span class="hi">होम</span></a>
+  <a href="driver.html" class="nav-link">🚗 <span class="en">Drive With Us</span><span class="hi">ड्राइवर बनें</span></a>
+  <button class="lang-toggle" onclick="toggleLang()" style="align-self:flex-start">हिंदी</button>
+</div>
+
+<div class="booking-page">
+  <div class="booking-header">
+    <h1><span class="en">Book Your <span>Cab</span></span><span class="hi">अपनी <span>कैब बुक करें</span></span></h1>
+    <p>🕉️ <span class="en">Har Har Mahadev — Safe journey to Baba Baidyanath awaits</span><span class="hi">हर हर महादेव — बाबा बैद्यनाथ तक सुरक्षित यात्रा आपका इंतजार कर रही है</span></p>
+  </div>
+
+  <div class="booking-wrapper">
+    <div id="shift-warning-banner" style="display:none; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.3); border-radius:var(--radius-md); padding:14px; margin-bottom:20px; font-size:13px; color:rgba(255,248,240,0.85); line-height:1.5;">
+      ⚠️ <span class="en"><strong style="color:#F59E0B">Notice:</strong> A driver shift is ending in <span id="shift-warn-mins">X</span> minutes. Please confirm your booking quickly to ensure availability!</span>
+      <span class="hi"><strong style="color:#F59E0B">ध्यान दें:</strong> एक ड्राइवर की शिफ्ट <span id="shift-warn-mins-hi">X</span> मिनट में खत्म हो रही है। उपलब्धता के लिए जल्दी बुक करें!</span>
+    </div>
+    <div class="booking-progress-bar"><div class="booking-progress-fill" id="booking-progress"></div></div>
+
+    <div class="step-indicators">
+      <div class="step-indicator active" id="step-tab-1">
+        <div class="step-indicator-num">1</div>
+        <span class="step-label"><span class="en">Route</span><span class="hi">रूट</span></span>
+      </div>
+      <div class="step-indicator" id="step-tab-2">
+        <div class="step-indicator-num">2</div>
+        <span class="step-label"><span class="en">Date & Time</span><span class="hi">तारीख</span></span>
+      </div>
+      <div class="step-indicator" id="step-tab-3">
+        <div class="step-indicator-num">3</div>
+        <span class="step-label"><span class="en">Your Details</span><span class="hi">आपकी जानकारी</span></span>
+      </div>
+    </div>
+
+    <div class="booking-layout">
+      <div>
+        <!-- PANEL 1: ROUTE -->
+        <div class="booking-panel active panel-card" id="panel-1">
+          <div class="panel-title"><span class="panel-title-icon">🗺️</span><span class="en">Choose Your Route & Vehicle</span><span class="hi">अपना रूट और वाहन चुनें</span></div>
+
+          <div class="quick-routes">
+            <div class="quick-routes-label">⚡ <span class="en">Popular Routes</span><span class="hi">लोकप्रिय रूट्स</span></div>
+            <div class="route-chips">
+              <div class="route-chip" data-from="Jasidih Rly. Station" data-to="Baidyanath Dham Temple">Jasidih → Dham</div>
+              <div class="route-chip" data-from="Baidyanath Dham Temple" data-to="Jasidih Rly. Station">Dham → Jasidih</div>
+              <div class="route-chip" data-from="Deoghar Bus Stand" data-to="Baidyanath Dham Temple">Bus Stand → Dham</div>
+              <div class="route-chip" data-from="Dumka" data-to="Baidyanath Dham Temple">Dumka → Dham</div>
+              <div class="route-chip" data-from="Giridih" data-to="Baidyanath Dham Temple">Giridih → Dham</div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label" for="pickup-select">📍 <span class="en">Pick-up Location</span><span class="hi">पिकअप स्थान</span></label>
+            <select class="form-select" id="pickup-select"><option value="">— <span class="en">Select pick-up</span> —</option></select>
+          </div>
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label" for="dropoff-select">🏁 <span class="en">Drop-off Location</span><span class="hi">गंतव्य स्थान</span></label>
+            <select class="form-select" id="dropoff-select"><option value="">— <span class="en">Select drop-off</span> —</option></select>
+          </div>
+
+          <div class="form-group" style="margin-bottom:4px">
+            <label class="form-label">🚗 <span class="en">Vehicle Type</span><span class="hi">वाहन प्रकार</span></label>
+            <div id="vehicle-grid"></div>
+          </div>
+
+          <div id="fare-preview">
+            <div class="fare-label"><span class="en">Estimated Fare</span><span class="hi">अनुमानित किराया</span></div>
+            <div id="fare-amount">—</div>
+            <div class="fare-note">💵 <span class="en">Pay cash to driver on arrival • Final fare may vary slightly</span><span class="hi">पहुँचने पर ड्राइवर को नकद दें • अंतिम किराया थोड़ा भिन्न हो सकता है</span></div>
+          </div>
+
+          <div class="form-nav">
+            <button class="btn btn-primary btn-next" onclick="goToStep(2)">
+              <span class="en">Next: Pick Date & Time →</span><span class="hi">आगे: तारीख और समय →</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PANEL 2: DATE & TIME -->
+        <div class="booking-panel panel-card" id="panel-2">
+          <div class="panel-title"><span class="panel-title-icon">📅</span><span class="en">When Are You Travelling?</span><span class="hi">आप कब यात्रा करेंगे?</span></div>
+          <div class="form-row" style="margin-bottom:16px">
+            <div class="form-group">
+              <label class="form-label" for="travel-date">📅 <span class="en">Travel Date</span><span class="hi">यात्रा तिथि</span></label>
+              <input class="form-input" type="date" id="travel-date" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="travel-time">🕐 <span class="en">Pick-up Time</span><span class="hi">पिकअप समय</span></label>
+              <input class="form-input" type="time" id="travel-time" />
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label" for="passengers">👥 <span class="en">Number of Passengers</span><span class="hi">यात्रियों की संख्या</span></label>
+            <select class="form-select" id="passengers">
+              <option value="1">1 Passenger</option><option value="2">2 Passengers</option>
+              <option value="3">3 Passengers</option><option value="4">4 Passengers</option>
+              <option value="5">5 Passengers</option><option value="6">6 Passengers</option>
+              <option value="7+">7+ Passengers</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="special-note">📝 <span class="en">Special Instructions (Optional)</span><span class="hi">विशेष निर्देश (वैकल्पिक)</span></label>
+            <input class="form-input" type="text" id="special-note" placeholder="e.g. Need wheelchair access / बड़े बुजुर्ग हैं" />
+          </div>
+          <div class="form-nav">
+            <button class="btn btn-ghost btn-back" onclick="goToStep(1)">← <span class="en">Back</span><span class="hi">वापस</span></button>
+            <button class="btn btn-primary btn-next" onclick="goToStep(3)">
+              <span class="en">Next: Your Details →</span><span class="hi">आगे: आपकी जानकारी →</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PANEL 3: CONTACT -->
+        <div class="booking-panel panel-card" id="panel-3">
+          <div class="panel-title"><span class="panel-title-icon">👤</span><span class="en">Your Contact Details</span><span class="hi">आपकी संपर्क जानकारी</span></div>
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label" for="passenger-name">👤 <span class="en">Full Name</span><span class="hi">पूरा नाम</span></label>
+            <input class="form-input" type="text" id="passenger-name" placeholder="e.g. Ramesh Kumar / रमेश कुमार" autocomplete="name" />
+          </div>
+          <div class="form-group" style="margin-bottom:20px">
+            <label class="form-label" for="passenger-phone">📱 <span class="en">WhatsApp Mobile Number</span><span class="hi">WhatsApp मोबाइल नंबर</span></label>
+            <div class="phone-row">
+              <input class="form-input phone-prefix" type="text" value="+91" readonly />
+              <input class="form-input" type="tel" id="passenger-phone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" autocomplete="tel" />
+            </div>
+            <div class="form-hint"><span class="en">Driver details will be sent on this WhatsApp number</span><span class="hi">ड्राइवर की जानकारी इस WhatsApp नंबर पर भेजी जाएगी</span></div>
+          </div>
+          <div style="background:rgba(255,107,0,0.08);border:1px solid rgba(255,107,0,0.2);border-radius:var(--radius-md);padding:16px;margin-bottom:20px;font-size:13px;color:rgba(255,248,240,0.7);line-height:1.65;">
+            🛡️ <span class="en"><strong>Privacy Notice:</strong> Your personal details will only be shared with your assigned driver and Raja Bhaiya. We do not sell your data. View our <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>.</span>
+            <span class="hi"><strong>गोपनीयता नोटिस:</strong> आपकी जानकारी केवल आपके ड्राइवर और राजा भैया के साथ साझा की जाएगी। हम आपका डेटा नहीं बेचते।</span>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:20px;">
+            <input type="checkbox" id="consent-check" style="margin-top:3px;accent-color:var(--gold);width:16px;height:16px;" />
+            <label for="consent-check" style="font-size:13px;color:rgba(255,248,240,0.7);cursor:pointer;line-height:1.5;">
+              <span class="en">I am 18+ and agree to the <a href="terms.html" style="color:var(--gold)">Terms of Service</a> & <a href="privacy.html" style="color:var(--gold)">Privacy Policy</a>. Payment is cash on arrival.</span>
+              <span class="hi">मैं 18+ हूँ और <a href="terms.html" style="color:var(--gold)">सेवा शर्तों</a> व <a href="privacy.html" style="color:var(--gold)">गोपनीयता नीति</a> से सहमत हूँ।</span>
+            </label>
+          </div>
+          <div class="form-nav">
+            <button class="btn btn-ghost btn-back" onclick="goToStep(2)">← <span class="en">Back</span><span class="hi">वापस</span></button>
+            <button class="btn btn-primary btn-next" onclick="submitBooking()">
+              🕉️ <span class="en">Confirm Booking</span><span class="hi">बुकिंग कन्फर्म करें</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SUCCESS -->
+        <div id="panel-success">
+          <div class="success-icon">🎉</div>
+          <div class="success-title"><span class="en">Booking Confirmed!</span><span class="hi">बुकिंग कन्फर्म!</span></div>
+          <p style="color:rgba(255,248,240,0.65);"><span class="en">Your booking ID:</span><span class="hi">आपकी बुकिंग ID:</span></p>
+          <div class="booking-conf-id" id="confirm-booking-id">DGC-000000</div>
+          <div class="conf-details">
+            <div class="conf-row"><span class="conf-key"><span class="en">Passenger</span><span class="hi">यात्री</span></span><span class="conf-val" id="confirm-name">—</span></div>
+            <div class="conf-row"><span class="conf-key"><span class="en">Route</span><span class="hi">रूट</span></span><span class="conf-val" id="confirm-route">—</span></div>
+            <div class="conf-row"><span class="conf-key"><span class="en">Date & Time</span><span class="hi">तारीख और समय</span></span><span class="conf-val" id="confirm-date">—</span></div>
+            <div class="conf-row"><span class="conf-key"><span class="en">Vehicle</span><span class="hi">वाहन</span></span><span class="conf-val" id="confirm-vehicle">—</span></div>
+            <div class="conf-row"><span class="conf-key"><span class="en">Payment</span><span class="hi">भुगतान</span></span><span class="conf-val">💰 <span class="en">Cash to Driver on Arrival</span><span class="hi">पहुँचने पर ड्राइवर को नकद</span></span></div>
+          </div>
+          <div class="wa-notice">
+            📱 <span class="en"><strong>What happens next?</strong> Raja Bhaiya has been notified on WhatsApp. A verified driver will be assigned and their details sent to you. If you have questions, call <a href="tel:+917643081977" style="color:var(--gold)">+91 76430 81977</a>.</span>
+            <span class="hi"><strong>आगे क्या होगा?</strong> राजा भैया को WhatsApp पर सूचित किया गया है। एक सत्यापित ड्राइवर असाइन किया जाएगा। प्रश्न के लिए <a href="tel:+917643081977" style="color:var(--gold)">+91 76430 81977</a> पर कॉल करें।</span>
+          </div>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px;">
+            <button class="btn btn-gold" onclick="resetBooking()"><span class="en">Book Another Cab</span><span class="hi">और एक कैब बुक करें</span></button>
+            <a href="index.html" class="btn btn-ghost"><span class="en">Go Home</span><span class="hi">होम जाएं</span></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="info-sidebar">
+        <div class="info-card">
+          <div class="info-card-title">📞 <span class="en">Need Help?</span><span class="hi">मदद चाहिए?</span></div>
+          <div class="info-item">📞 <a href="tel:+917643081977" style="color:var(--gold);font-weight:700">+91 76430 81977</a></div>
+          <div class="info-item">💬 <a href="https://wa.me/917643081977" target="_blank" style="color:var(--gold)">WhatsApp</a></div>
+          <div class="info-item" style="font-size:12px;color:rgba(255,248,240,0.45);">Raja Bhaiya — Available 6 AM–10 PM</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">✅ <span class="en">Booking Promise</span><span class="hi">बुकिंग वादा</span></div>
+          <div class="info-item">💰 <span class="en">Pay only on arrival — zero advance</span><span class="hi">पहुँचने पर ही भुगतान</span></div>
+          <div class="info-item">✅ <span class="en">Verified drivers with valid license</span><span class="hi">वैध लाइसेंस वाले ड्राइवर</span></div>
+          <div class="info-item">📱 <span class="en">WhatsApp confirmation sent</span><span class="hi">WhatsApp पुष्टि भेजी जाएगी</span></div>
+          <div class="info-item">❌ <span class="en">Free cancellation before trip</span><span class="hi">यात्रा से पहले मुफ्त रद्द करें</span></div>
+        </div>
+        <div class="info-card" style="background:rgba(245,200,66,0.06);border-color:rgba(245,200,66,0.2);">
+          <div class="info-card-title">🕉️ <span class="en">Shrawan Season</span><span class="hi">श्रावण सीजन</span></div>
+          <p style="font-size:13px;color:rgba(255,248,240,0.65);line-height:1.6;"><span class="en">During Shrawan (July–August), demand is very high. Book at least 2 hours in advance for guaranteed availability.</span><span class="hi">श्रावण (जुलाई–अगस्त) में मांग बहुत अधिक होती है। गारंटीड उपलब्धता के लिए कम से कम 2 घंटे पहले बुक करें।</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<a class="wa-fab" href="https://wa.me/917643081977?text=Namaste%20Raja%20Bhaiya!%20I%20need%20help%20with%20a%20cab%20booking%20%F0%9F%99%8F" target="_blank">
+  <div class="wa-tooltip"><span class="en">Chat with Raja Bhaiya</span><span class="hi">राजा भैया से बात करें</span></div>
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+<div id="toast-container"></div>
+<script src="js/main.js"></script>
+<script src="js/booking.js"></script>
+<script>
+  // Pre-fill from URL params
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const from = params.get('from');
+    const to = params.get('to');
+    if (from) { setTimeout(() => { const el = document.getElementById('pickup-select'); if(el) el.value = from; updateFarePreview(); }, 200); }
+    if (to) { setTimeout(() => { const el = document.getElementById('dropoff-select'); if(el) el.value = to; updateFarePreview(); }, 200); }
+  });
+</script>
+</body>
+</html>

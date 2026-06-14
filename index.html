@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevgharCabs — Har Har Mahadev | Trusted Cab Service for Baidyanath Dham, Devghar</title>
+  <meta name="description" content="Book trusted cabs for Baidyanath Dham Jyotirlinga, Devghar. 3-step booking, cash on arrival, verified drivers. Operated by Rajkumar Shukla Family. Call: +91 76430 81977" />
+  <meta name="keywords" content="cab in Devghar, Baidyanath Dham cab booking, Jasidih to Devghar cab, pilgrimage cab Devghar Jharkhand, देवघर कैब, बैद्यनाथ धाम कैब" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="DevgharCabs — Rajkumar Shukla Family" />
+  <meta property="og:title" content="DevgharCabs — Har Har Mahadev | Baidyanath Dham Cab Service" />
+  <meta property="og:description" content="Trusted pilgrim cab service for Baidyanath Dham, Devghar. Book in 60 seconds. Pay cash on arrival." />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://devgharcabs.in/" />
+  <!-- JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TaxiService",
+    "name": "DevgharCabs",
+    "description": "Trusted cab service for pilgrims visiting Baidyanath Dham Jyotirlinga, Devghar",
+    "telephone": "+91-7643081977",
+    "areaServed": "Devghar, Jharkhand",
+    "url": "https://devgharcabs.in",
+    "priceRange": "₹100–₹2000"
+  }
+  </script>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 50% -10%, #4A1A00 0%, #1A0A00 55%, #0A0300 100%);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 120px clamp(16px,5%,80px) 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-particles { position: absolute; inset: 0; pointer-events: none; }
+    .particle {
+      position: absolute; font-family: 'Tiro Devanagari Sanskrit', serif;
+      color: var(--gold); user-select: none; animation: float linear infinite;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 860px; animation: slide-up 0.8s ease; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,200,66,0.1); border: 1px solid rgba(245,200,66,0.35);
+      padding: 8px 22px; border-radius: var(--radius-pill);
+      font-size: 13px; color: var(--gold); font-weight: 600;
+      margin-bottom: 28px; letter-spacing: 0.5px;
+    }
+    .hero-h1 {
+      font-size: clamp(38px, 6.5vw, 80px); font-weight: 900;
+      line-height: 1.05; margin-bottom: 16px;
+      background: linear-gradient(135deg, #FFF 0%, var(--gold) 45%, var(--saffron) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: shimmer 5s linear infinite;
+    }
+    .hero-tagline {
+      font-family: 'Tiro Devanagari Sanskrit', serif;
+      font-size: clamp(20px, 3.5vw, 34px); color: var(--gold);
+      margin-bottom: 16px; animation: pulse-glow 2.5s ease-in-out infinite;
+      text-shadow: 0 0 40px rgba(245,200,66,0.3);
+    }
+    .hero-desc {
+      font-size: clamp(15px, 2vw, 18px); color: rgba(255,248,240,0.72);
+      max-width: 580px; margin: 0 auto 48px; line-height: 1.75;
+    }
+    .hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .hero-cta .btn { font-size: 17px; padding: 17px 44px; }
+    .hero-features {
+      display: flex; justify-content: center; gap: 32px; margin-top: 52px;
+      flex-wrap: wrap;
+    }
+    .hero-feat {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: rgba(255,248,240,0.65);
+    }
+    .hero-feat-icon { color: var(--gold); font-size: 16px; }
+
+    /* ===== TRUST STRIP ===== */
+    .trust-strip {
+      background: linear-gradient(90deg, #350A0A, #4A0E0E, #350A0A);
+      border-top: 1px solid rgba(245,200,66,0.4); border-bottom: 1px solid rgba(245,200,66,0.4);
+      padding: 20px clamp(16px,5%,80px);
+      display: flex; justify-content: center; gap: 0; flex-wrap: wrap;
+    }
+    .trust-item {
+      text-align: center; padding: 8px 40px;
+      border-right: 1px solid rgba(245,200,66,0.2);
+    }
+    .trust-item:last-child { border-right: none; }
+    .trust-num { font-size: 28px; font-weight: 900; color: var(--gold); line-height: 1; }
+    .trust-sub { font-size: 12px; color: rgba(255,248,240,0.6); margin-top: 3px; letter-spacing: 0.3px; }
+
+    /* ===== HOW IT WORKS ===== */
+    .hiw-bg { background: linear-gradient(180deg, #0A0300 0%, #120600 100%); }
+    .hiw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; max-width: 1000px; margin: 0 auto; }
+    .hiw-step { text-align: center; }
+    .hiw-circle {
+      width: 88px; height: 88px; border-radius: 50%; margin: 0 auto 20px;
+      background: linear-gradient(135deg, rgba(255,107,0,0.2), rgba(245,200,66,0.1));
+      border: 2px solid rgba(245,200,66,0.3);
+      display: flex; align-items: center; justify-content: center; font-size: 36px;
+      box-shadow: 0 8px 32px rgba(255,107,0,0.15); position: relative;
+      transition: all 0.3s;
+    }
+    .hiw-step:hover .hiw-circle { transform: scale(1.08); box-shadow: 0 12px 40px rgba(255,107,0,0.3); border-color: var(--gold); }
+    .hiw-num-badge {
+      position: absolute; top: -8px; right: -8px;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--saffron), var(--deep-saffron));
+      color: white; font-size: 13px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 8px rgba(255,107,0,0.4);
+    }
+    .hiw-step h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .hiw-step p { font-size: 14px; color: rgba(255,248,240,0.6); line-height: 1.65; }
+
+    /* ===== ROUTES SECTION ===== */
+    .routes-bg { background: radial-gradient(ellipse at center, #1E0800 0%, #0A0300 100%); }
+    .routes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; }
+    .route-card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg); padding: 28px; cursor: pointer; transition: all 0.35s;
+      position: relative; overflow: hidden; text-decoration: none; display: block;
+    }
+    .route-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,107,0,0.12), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .route-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 16px 48px rgba(0,0,0,0.4); }
+    .route-card:hover::after { opacity: 1; }
+    .route-card-icon { font-size: 30px; margin-bottom: 14px; }
+    .route-card-type { font-size: 11px; color: var(--saffron); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+    .route-card-name { font-size: 17px; font-weight: 700; color: var(--cream); margin: 5px 0 16px; line-height: 1.3; }
+    .route-card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .route-fare { color: var(--gold); font-weight: 800; font-size: 16px; }
+    .route-time { color: rgba(255,248,240,0.5); font-size: 13px; }
+
+    /* ===== WHY CHOOSE ===== */
+    .why-bg { background: #0A0300; }
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; }
+    .why-card {
+      background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 32px;
+      transition: all 0.3s;
+    }
+    .why-card:hover { transform: translateY(-6px); border-color: rgba(245,200,66,0.5); background: rgba(255,107,0,0.06); }
+    .why-icon { font-size: 40px; margin-bottom: 16px; }
+    .why-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .why-desc { font-size: 14px; color: rgba(255,248,240,0.6); line-height: 1.7; }
+
+    /* ===== HERITAGE ===== */
+    .heritage-bg { background: radial-gradient(ellipse at center, #280B00, #0A0300); }
+    .heritage-card {
+      max-width: 750px; margin: 0 auto;
+      background: linear-gradient(135deg, rgba(245,200,66,0.08), rgba(255,107,0,0.05));
+      border: 1px solid rgba(245,200,66,0.25); border-radius: var(--radius-lg); padding: 48px;
+      text-align: center;
+    }
+    .heritage-om { font-family: 'Tiro Devanagari Sanskrit', serif; font-size: 52px; color: var(--gold); animation: pulse-glow 2.5s ease-in-out infinite; margin-bottom: 20px; }
+    .heritage-name { font-size: 26px; font-weight: 900; color: var(--cream); }
+    .heritage-name span { color: var(--gold); }
+    .heritage-role { font-size: 14px; color: rgba(255,248,240,0.55); margin-top: 6px; letter-spacing: 0.5px; }
+    .heritage-desc { font-size: 15px; color: rgba(255,248,240,0.7); line-height: 1.8; margin-top: 20px; }
+    .heritage-contact {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: rgba(255,107,0,0.12); border: 1px solid rgba(255,107,0,0.3);
+      border-radius: var(--radius-pill); padding: 14px 28px; margin-top: 28px;
+    }
+    .heritage-contact a { color: var(--gold); font-weight: 700; font-size: 17px; }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      background: linear-gradient(135deg, #3A1200, #1A0A00, #3A0A0A);
+      border-top: 1px solid rgba(245,200,66,0.15);
+    }
+    .cta-inner { max-width: 700px; margin: 0 auto; text-align: center; }
+    .cta-inner h2 { font-size: clamp(28px, 4vw, 46px); margin-bottom: 16px; }
+    .cta-inner p { font-size: 17px; color: rgba(255,248,240,0.7); margin-bottom: 36px; line-height: 1.7; }
+    .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    @media (max-width: 640px) {
+      .trust-item { padding: 8px 20px; }
+      .heritage-card { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+  <div class="loader-om">ॐ</div>
+  <div class="loader-bar"><div class="loader-progress"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="nav-brand">
+    <div class="nav-om">ॐ</div>
+    <div class="nav-brand-text">
+      <div class="nav-brand-name">Devghar<span>Cabs</span></div>
+      <div class="nav-brand-sub">Baidyanath Dham</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#routes" class="nav-link"><span class="en">Routes</span><span class="hi">रूट्स</span></a>
+    <a href="#how-it-works" class="nav-link"><span class="en">How It Works</span><span class="hi">कैसे काम करता है</span></a>
+    <a href="driver.html" class="nav-link"><span class="en">Drive With Us</span><span class="hi">ड्राइवर बनें</span></a>
+    <button class="lang-toggle" onclick="toggleLang()">हिंदी</button>
+    <a href="booking.html" class="nav-link nav-cta">🚕 <span class="en">Book Now</span><span class="hi">बुक करें</span></a>
+  </div>
+  <div class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu">
+  <a href="#routes" class="nav-link">🗺️ <span class="en">Routes</span><span class="hi">रूट्स</span></a>
+  <a href="#how-it-works" class="nav-link">💡 <span class="en">How It Works</span><span class="hi">कैसे काम करता है</span></a>
+  <a href="driver.html" class="nav-link">🚗 <span class="en">Drive With Us</span><span class="hi">ड्राइवर बनें</span></a>
+  <button class="lang-toggle" onclick="toggleLang()" style="align-self:flex-start">हिंदी</button>
+  <a href="booking.html" class="btn btn-primary" style="margin-top:8px">🚕 <span class="en">Book Now</span><span class="hi">अभी बुक करें</span></a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <!-- Floating ॐ particles -->
+  <div class="hero-particles" id="hero-particles"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">🕉️ <span class="en">Trusted by Baidyanath Dham Pilgrims since 2024</span><span class="hi">बाबा बैद्यनाथ धाम के तीर्थयात्रियों का भरोसा</span></div>
+    <h1 class="hero-h1">
+      <span class="en">Your Sacred Journey<br/>Starts Here</span>
+      <span class="hi">आपकी पवित्र यात्रा<br/>यहाँ से शुरू होती है</span>
+    </h1>
+    <div class="hero-tagline">🔱 <span class="en">Har Har Mahadev</span><span class="hi">हर हर महादेव</span> 🔱</div>
+    <p class="hero-desc">
+      <span class="en">Safe, verified cab service for pilgrims visiting Baba Baidyanath Jyotirlinga. Book in 3 easy steps — no app needed. Pay cash to driver on arrival.</span>
+      <span class="hi">बाबा बैद्यनाथ ज्योतिर्लिंग जाने वाले तीर्थयात्रियों के लिए सुरक्षित कैब। 3 आसान चरणों में बुक करें — कोई ऐप नहीं। पहुँचने पर नकद भुगतान।</span>
+    </p>
+    <div class="hero-cta">
+      <a href="booking.html" class="btn btn-primary btn-lg">🚕 <span class="en">Book a Cab Now</span><span class="hi">अभी कैब बुक करें</span></a>
+      <a href="tel:+917643081977" class="btn btn-outline btn-lg">📞 <span class="en">Call Raja Bhaiya</span><span class="hi">राजा भैया को कॉल करें</span></a>
+    </div>
+    <div class="hero-features">
+      <div class="hero-feat"><span class="hero-feat-icon">💰</span><span class="en">Cash on Arrival</span><span class="hi">पहुँचने पर नकद</span></div>
+      <div class="hero-feat"><span class="hero-feat-icon">✅</span><span class="en">Verified Drivers</span><span class="hi">सत्यापित ड्राइवर</span></div>
+      <div class="hero-feat"><span class="hero-feat-icon">📱</span><span class="en">WhatsApp Updates</span><span class="hi">WhatsApp अपडेट</span></div>
+      <div class="hero-feat"><span class="hero-feat-icon">🙏</span><span class="en">Local Family Trust</span><span class="hi">स्थानीय परिवार का भरोसा</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="trust-item"><div class="trust-num" data-count="500">0</div><div class="trust-sub"><span class="en">Happy Pilgrims</span><span class="hi">संतुष्ट यात्री</span></div></div>
+  <div class="trust-item"><div class="trust-num" data-count="25">0</div><div class="trust-sub"><span class="en">Verified Drivers</span><span class="hi">सत्यापित ड्राइवर</span></div></div>
+  <div class="trust-item"><div class="trust-num" data-count="15">0</div><div class="trust-sub"><span class="en">Routes Covered</span><span class="hi">रूट कवर</span></div></div>
+  <div class="trust-item"><div class="trust-num">4.8★</div><div class="trust-sub"><span class="en">Average Rating</span><span class="hi">औसत रेटिंग</span></div></div>
+  <div class="trust-item"><div class="trust-num">24/7</div><div class="trust-sub"><span class="en">Support Available</span><span class="hi">सहायता उपलब्ध</span></div></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section hiw-bg" id="how-it-works">
+  <div class="section-label section-center"><span class="en">Simple 4-Step Process</span><span class="hi">सरल 4-चरण प्रक्रिया</span></div>
+  <h2 class="section-title section-center"><span class="en">How DevgharCabs <span>Works</span></span><span class="hi">DevgharCabs <span>कैसे काम करता है</span></span></h2>
+  <div class="hiw-grid">
+    <div class="hiw-step">
+      <div class="hiw-circle"><div class="hiw-num-badge">1</div>📋</div>
+      <h3><span class="en">Fill the Form</span><span class="hi">फॉर्म भरें</span></h3>
+      <p><span class="en">Choose your route, date, and vehicle. Enter your phone number. Done in 60 seconds.</span><span class="hi">रूट, तारीख और वाहन चुनें। फोन नंबर डालें। 60 सेकंड में पूरा।</span></p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-circle"><div class="hiw-num-badge">2</div>🔔</div>
+      <h3><span class="en">Instant Notification</span><span class="hi">तुरंत सूचना</span></h3>
+      <p><span class="en">Raja Bhaiya and the nearest driver get an instant WhatsApp alert about your booking.</span><span class="hi">राजा भैया और निकटतम ड्राइवर को WhatsApp पर तुरंत सूचना मिलती है।</span></p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-circle"><div class="hiw-num-badge">3</div>📱</div>
+      <h3><span class="en">Driver Details on WhatsApp</span><span class="hi">WhatsApp पर ड्राइवर जानकारी</span></h3>
+      <p><span class="en">You receive your driver's name, vehicle number, and arrival time on WhatsApp.</span><span class="hi">आपको ड्राइवर का नाम, गाड़ी नंबर और आगमन समय WhatsApp पर मिलता है।</span></p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-circle"><div class="hiw-num-badge">4</div>💰</div>
+      <h3><span class="en">Reach & Pay Cash</span><span class="hi">पहुँचें और नकद दें</span></h3>
+      <p><span class="en">Reach your destination safely. Pay the agreed cash fare directly to your driver. No apps or cards needed.</span><span class="hi">सुरक्षित पहुँचें। ड्राइवर को सहमत नकद किराया दें। कोई ऐप या कार्ड नहीं।</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- POPULAR ROUTES -->
+<section class="section routes-bg" id="routes">
+  <div class="section-label section-center"><span class="en">Popular Routes</span><span class="hi">लोकप्रिय रूट्स</span></div>
+  <h2 class="section-title section-center"><span class="en">We Cover All <span>Devghar Routes</span></span><span class="hi">हम सभी <span>देवघर रूट्स</span> कवर करते हैं</span></h2>
+  <div class="routes-grid">
+    <a href="booking.html?from=Jasidih+Rly.+Station&to=Baidyanath+Dham+Temple" class="route-card">
+      <div class="route-card-icon">🚉</div>
+      <div class="route-card-type">FROM STATION</div>
+      <div class="route-card-name">Jasidih Station → Baidyanath Dham Temple</div>
+      <div class="route-card-footer"><span class="route-fare">₹150 – 500</span><span class="route-time">⏱ ~20 min</span></div>
+    </a>
+    <a href="booking.html?from=Baidyanath+Dham+Temple&to=Jasidih+Rly.+Station" class="route-card">
+      <div class="route-card-icon">🔄</div>
+      <div class="route-card-type">RETURN</div>
+      <div class="route-card-name">Baidyanath Dham Temple → Jasidih Station</div>
+      <div class="route-card-footer"><span class="route-fare">₹150 – 500</span><span class="route-time">⏱ ~20 min</span></div>
+    </a>
+    <a href="booking.html?from=Deoghar+Bus+Stand&to=Baidyanath+Dham+Temple" class="route-card">
+      <div class="route-card-icon">🚌</div>
+      <div class="route-card-type">FROM BUS STAND</div>
+      <div class="route-card-name">Deoghar Bus Stand → Baidyanath Dham</div>
+      <div class="route-card-footer"><span class="route-fare">₹60 – 320</span><span class="route-time">⏱ ~10 min</span></div>
+    </a>
+    <a href="booking.html?from=Dumka&to=Baidyanath+Dham+Temple" class="route-card">
+      <div class="route-card-icon">🏙️</div>
+      <div class="route-card-type">FROM DUMKA</div>
+      <div class="route-card-name">Dumka → Baidyanath Dham Temple</div>
+      <div class="route-card-footer"><span class="route-fare">₹700 – 2,000</span><span class="route-time">⏱ ~1.5 hrs</span></div>
+    </a>
+    <a href="booking.html?from=Giridih&to=Baidyanath+Dham+Temple" class="route-card">
+      <div class="route-card-icon">🌄</div>
+      <div class="route-card-type">FROM GIRIDIH</div>
+      <div class="route-card-name">Giridih → Baidyanath Dham Temple</div>
+      <div class="route-card-footer"><span class="route-fare">₹900 – 2,500</span><span class="route-time">⏱ ~2 hrs</span></div>
+    </a>
+    <a href="booking.html" class="route-card" style="background:linear-gradient(135deg,rgba(255,107,0,0.1),rgba(245,200,66,0.06));border-color:rgba(255,107,0,0.3);">
+      <div class="route-card-icon">✨</div>
+      <div class="route-card-type">ANY ROUTE</div>
+      <div class="route-card-name">Custom Pickup & Drop Anywhere in Jharkhand</div>
+      <div class="route-card-footer"><span class="route-fare">Quote on Call</span><span class="route-time">📞 +91 76430 81977</span></div>
+    </a>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section why-bg">
+  <div class="section-label section-center"><span class="en">Why Pilgrims Love Us</span><span class="hi">यात्री हमें क्यों पसंद करते हैं</span></div>
+  <h2 class="section-title section-center"><span class="en">Built for <span>Pilgrim Comfort</span></span><span class="hi"><span>तीर्थयात्री सुविधा</span> के लिए बनाया</span></h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">💰</div>
+      <div class="why-title"><span class="en">Cash on Arrival — No UPI Needed</span><span class="hi">नकद भुगतान — UPI की जरूरत नहीं</span></div>
+      <div class="why-desc"><span class="en">Elders and first-time smartphone users don't need to worry about digital payments. Pay cash directly to your driver after reaching safely.</span><span class="hi">बुजुर्ग और पहली बार स्मार्टफोन उपयोगकर्ताओं को डिजिटल भुगतान की चिंता नहीं। सुरक्षित पहुँचने के बाद ड्राइवर को सीधे नकद दें।</span></div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">✅</div>
+      <div class="why-title"><span class="en">Verified Local Drivers</span><span class="hi">सत्यापित स्थानीय ड्राइवर</span></div>
+      <div class="why-desc"><span class="en">All drivers are personally verified by Raja Bhaiya — valid license, RC book, and Aadhaar checked. You always know who's coming to pick you up.</span><span class="hi">सभी ड्राइवर राजा भैया द्वारा व्यक्तिगत रूप से सत्यापित हैं — लाइसेंस, RC बुक, आधार जाँचा गया।</span></div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📱</div>
+      <div class="why-title"><span class="en">WhatsApp Updates — No App Needed</span><span class="hi">WhatsApp अपडेट — कोई ऐप नहीं</span></div>
+      <div class="why-desc"><span class="en">Get booking confirmation and driver details directly on WhatsApp — the app you already use daily. No need to download anything new.</span><span class="hi">WhatsApp पर बुकिंग पुष्टि और ड्राइवर की जानकारी पाएं — जो ऐप आप पहले से उपयोग करते हैं।</span></div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🙏</div>
+      <div class="why-title"><span class="en">Local Family Trust</span><span class="hi">स्थानीय परिवार का भरोसा</span></div>
+      <div class="why-desc"><span class="en">Operated by the Rajkumar Shukla family of Devghar — a trusted name in the community. Raja Bhaiya personally handles all escalations.</span><span class="hi">देवघर के राजकुमार शुक्ला परिवार द्वारा संचालित — समुदाय में एक विश्वसनीय नाम।</span></div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🔱</div>
+      <div class="why-title"><span class="en">Devotional Service</span><span class="hi">भक्तिमय सेवा</span></div>
+      <div class="why-desc"><span class="en">We understand the pilgrimage experience. Our drivers know the temple routes, prasad shops, and dharamshalas — they're pilgrims too.</span><span class="hi">हम तीर्थयात्रा का अनुभव समझते हैं। हमारे ड्राइवर मंदिर के रास्ते, प्रसाद की दुकानें और धर्मशाला जानते हैं।</span></div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">⚡</div>
+      <div class="why-title"><span class="en">Book in 60 Seconds</span><span class="hi">60 सेकंड में बुक करें</span></div>
+      <div class="why-desc"><span class="en">3 simple steps, no account required. Works perfectly on basic 4G connections. Hindi and English both supported.</span><span class="hi">3 सरल चरण, कोई अकाउंट नहीं। बेसिक 4G कनेक्शन पर भी काम करता है। हिंदी और अंग्रेजी दोनों।</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- HERITAGE -->
+<section class="section heritage-bg">
+  <div class="section-label section-center"><span class="en">Our Legacy</span><span class="hi">हमारी विरासत</span></div>
+  <h2 class="section-title section-center"><span class="en">A Family's <span>Devotion to Service</span></span><span class="hi">एक परिवार की <span>सेवा के प्रति समर्पण</span></span></h2>
+  <div class="heritage-card">
+    <div class="heritage-om">ॐ</div>
+    <div class="heritage-name">Raja Bhaiya — <span>Rajkumar Shukla Family</span></div>
+    <div class="heritage-role"><span class="en">Platform Operator & Pilgrim Services Director, Devghar, Jharkhand</span><span class="hi">प्लेटफ़ॉर्म ऑपरेटर, देवघर, झारखंड</span></div>
+    <p class="heritage-desc">
+      <span class="en">DevgharCabs is born from a simple belief — every devotee deserves a safe, hassle-free journey to Baba Baidyanath. The Rajkumar Shukla family has deep roots in Devghar's community. Through DevgharCabs, we combine our local trust with modern technology to serve pilgrims across India who make this sacred journey.</span>
+      <span class="hi">DevgharCabs एक सरल विश्वास से जन्मा है — हर भक्त को बाबा बैद्यनाथ की सुरक्षित और परेशानी-मुक्त यात्रा मिलनी चाहिए। राजकुमार शुक्ला परिवार देवघर की जड़ों से जुड़ा है। DevgharCabs के जरिए, हम स्थानीय भरोसे को आधुनिक तकनीक से जोड़कर सेवा करते हैं।</span>
+    </p>
+    <div class="heritage-contact">
+      <span>📞</span>
+      <a href="tel:+917643081977">+91 76430 81977</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section cta-section">
+  <div class="cta-inner">
+    <h2><span class="en">Ready to Begin Your <span style="color:var(--gold)">Sacred Journey?</span></span><span class="hi">अपनी <span style="color:var(--gold)">पवित्र यात्रा</span> शुरू करने के लिए तैयार?</span></h2>
+    <p><span class="en">Book your cab right now in 3 steps. Or call Raja Bhaiya directly for any special requirements. 🙏 Har Har Mahadev!</span><span class="hi">अभी 3 चरणों में कैब बुक करें। या किसी विशेष आवश्यकता के लिए सीधे राजा भैया को कॉल करें। 🙏 हर हर महादेव!</span></p>
+    <div class="cta-btns">
+      <a href="booking.html" class="btn btn-primary btn-lg">🚕 <span class="en">Book a Cab Now</span><span class="hi">अभी कैब बुक करें</span></a>
+      <a href="https://wa.me/917643081977?text=Namaste%20Raja%20Bhaiya!%20I%20need%20a%20cab%20for%20Baidyanath%20Dham%20%F0%9F%99%8F" target="_blank" class="btn btn-outline btn-lg">💬 <span class="en">WhatsApp Us</span><span class="hi">WhatsApp करें</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-om">ॐ</div>
+      <div class="footer-brand-name">Devghar<span>Cabs</span></div>
+      <p class="footer-brand-desc"><span class="en">Trusted pilgrim cab service for Baba Baidyanath Dham, Devghar, Jharkhand. Operated by the Rajkumar Shukla Family. Serving with devotion.</span><span class="hi">बाबा बैद्यनाथ धाम, देवघर, झारखंड के लिए भरोसेमंद तीर्थयात्री कैब सेवा। राजकुमार शुक्ला परिवार द्वारा संचालित।</span></p>
+    </div>
+    <div>
+      <div class="footer-col-title"><span class="en">Pages</span><span class="hi">पेज</span></div>
+      <a href="index.html" class="footer-link"><span class="en">Home</span><span class="hi">होम</span></a>
+      <a href="booking.html" class="footer-link"><span class="en">Book a Cab</span><span class="hi">कैब बुक करें</span></a>
+      <a href="driver.html" class="footer-link"><span class="en">Become a Driver</span><span class="hi">ड्राइवर बनें</span></a>
+      <a href="dashboard.html" class="footer-link"><span class="en">Admin Dashboard</span><span class="hi">डैशबोर्ड</span></a>
+    </div>
+    <div>
+      <div class="footer-col-title"><span class="en">Legal</span><span class="hi">कानूनी</span></div>
+      <a href="privacy.html" class="footer-link">Privacy Policy</a>
+      <a href="terms.html" class="footer-link">Terms of Service</a>
+      <a href="grievance.html" class="footer-link">Grievance Redressal</a>
+    </div>
+    <div>
+      <div class="footer-col-title"><span class="en">Contact</span><span class="hi">संपर्क</span></div>
+      <div class="footer-contact-item">📞 <a href="tel:+917643081977">+91 76430 81977</a></div>
+      <div class="footer-contact-item">💬 <a href="https://wa.me/917643081977" target="_blank">WhatsApp</a></div>
+      <div class="footer-contact-item" style="font-size:13px; line-height:1.4;">
+        <strong>Legal Entity:</strong> Rajkumar Shukla Family<br>
+        📍 Devghar, Jharkhand - 814112, India
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 DevgharCabs — A Rajkumar Shukla Family Initiative | 🕉️ Har Har Mahadev 🔱</span>
+    <span>Compliant with <a href="privacy.html">DPDP Act 2023</a> &amp; <a href="grievance.html">IT Rules 2021</a></span>
+  </div>
+</footer>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookie-consent" style="display:none; position:fixed; bottom:0; left:0; right:0; background:rgba(10,3,0,0.95); border-top:1px solid rgba(245,200,66,0.3); padding:16px 20px; z-index:9999; backdrop-filter:blur(10px); flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px;">
+  <div style="flex:1; min-width:280px; font-size:13px; color:rgba(255,248,240,0.8); line-height:1.5;">
+    🍪 <strong>We value your privacy.</strong> We use essential cookies to remember your preferences (like language) and session. We do not use tracking or advertising cookies. By continuing to use DevgharCabs, you consent to our <a href="privacy.html" style="color:var(--gold); text-decoration:underline;">Privacy Policy</a>.
+  </div>
+  <button onclick="acceptCookies()" class="btn btn-gold btn-sm" style="white-space:nowrap;">Accept &amp; Close</button>
+</div>
+
+<!-- FLOATING WHATSAPP -->
+<a class="wa-fab" href="https://wa.me/917643081977?text=Namaste%20Raja%20Bhaiya!%20I%20need%20a%20cab%20for%20Baidyanath%20Dham%20%F0%9F%99%8F" target="_blank" aria-label="WhatsApp Chat">
+  <div class="wa-tooltip"><span class="en">Chat with Raja Bhaiya</span><span class="hi">राजा भैया से बात करें</span></div>
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<div id="toast-container"></div>
+
+<script src="js/main.js"></script>
+<script>
+  // Animate trust numbers on scroll
+  const nums = document.querySelectorAll('.trust-num[data-count]');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.count);
+        let current = 0;
+        const step = Math.ceil(target / 30);
+        const iv = setInterval(() => {
+          current = Math.min(current + step, target);
+          el.textContent = current + '+';
+          if (current >= target) clearInterval(iv);
+        }, 40);
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  nums.forEach(n => observer.observe(n));
+
+  // Hero particles
+  (function spawnParticles() {
+    const container = document.getElementById('hero-particles');
+    if (!container) return;
+    const symbols = ['ॐ', '🔱', '🕉️'];
+    for (let i = 0; i < 6; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = symbols[i % symbols.length];
+      p.style.cssText = `
+        left:${Math.random()*90+5}%;
+        top:${Math.random()*80+10}%;
+        font-size:${Math.random()*60+40}px;
+        opacity:${Math.random()*0.06+0.02};
+        animation-duration:${Math.random()*8+5}s;
+        animation-delay:${Math.random()*4}s;
+      `;
+      container.appendChild(p);
+    }
+  })();
+</script>
+</body>
+</html>

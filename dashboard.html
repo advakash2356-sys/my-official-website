@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — DevgharCabs (Raja Bhaiya)</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: #060200; }
+    /* ===== LOGIN SCREEN ===== */
+    #login-screen { position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at 50% 30%,#2C0D00,#050200);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px; }
+    .login-box { max-width:400px;width:100%; }
+    .login-om { font-family:'Tiro Devanagari Sanskrit',serif;font-size:64px;color:var(--gold);animation:pulse-glow 2s ease-in-out infinite;margin-bottom:12px; }
+    .login-title { font-size:28px;font-weight:900;margin-bottom:6px; }
+    .login-title span { color:var(--gold); }
+    .login-sub { font-size:14px;color:rgba(255,248,240,0.5);margin-bottom:40px; }
+    .pin-input { font-size:32px;letter-spacing:20px;text-align:center;padding:22px;width:100%;background:rgba(255,255,255,0.06);border:2px solid rgba(245,200,66,0.25);border-radius:var(--radius-md);color:var(--gold);font-weight:900; }
+    .pin-input:focus { border-color:var(--gold);box-shadow:0 0 0 4px rgba(245,200,66,0.15); }
+    .pin-input.error { border-color:var(--error);animation:shake 0.4s ease; }
+    .pin-input.success { border-color:var(--success); }
+    @keyframes shake { 0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)} }
+    #pin-error { display:none;color:var(--error);font-size:13px;margin-bottom:12px; }
+    .pin-hint { font-size:12px;color:rgba(255,248,240,0.3);margin-top:10px; }
+
+    /* ===== DASHBOARD ===== */
+    #dashboard-main { display:none;min-height:100vh; }
+
+    /* DASH NAV */
+    .dash-nav {
+      background:rgba(6,2,0,0.97);border-bottom:1px solid rgba(245,200,66,0.12);
+      padding:0 clamp(16px,3%,40px);height:66px;
+      display:flex;align-items:center;justify-content:space-between;
+      position:sticky;top:0;z-index:200;backdrop-filter:blur(20px);
+    }
+    .dash-brand { font-size:19px;font-weight:800;color:var(--cream);display:flex;align-items:center;gap:10px; }
+    .dash-brand .om { font-family:'Tiro Devanagari Sanskrit',serif;font-size:26px;color:var(--gold);animation:pulse-glow 2.5s ease-in-out infinite; }
+    .dash-brand span.gold { color:var(--gold); }
+    .dash-nav-right { display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
+    .dash-time { font-size:12px;color:rgba(255,248,240,0.4);min-width:160px; }
+    .dash-logout { background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#F87171;padding:7px 16px;border-radius:var(--radius-pill);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s; }
+    .dash-logout:hover { background:rgba(239,68,68,0.3); }
+
+    /* ESCALATION HEADER BADGE */
+    #escalation-header-badge {
+      display:none;align-items:center;gap:6px;background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);
+      color:#F87171;padding:5px 14px;border-radius:var(--radius-pill);font-size:12px;font-weight:700;
+    }
+    #escalation-header-badge.pulse { animation:ping 1.2s ease-in-out infinite; }
+    @keyframes ping { 0%,100%{opacity:1}50%{opacity:0.5;transform:scale(1.05)} }
+
+    /* STATS GRID */
+    .stats-row { display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;padding:20px clamp(16px,3%,40px) 0; }
+    .stat-card { background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:20px;display:flex;flex-direction:column;gap:6px;transition:all 0.3s; }
+    .stat-card:hover { transform:translateY(-3px);border-color:rgba(245,200,66,0.4); }
+    .stat-icon { font-size:26px; }
+    .stat-label { font-size:11px;color:rgba(255,248,240,0.5);font-weight:600;letter-spacing:0.5px;text-transform:uppercase; }
+    .stat-num { font-size:32px;font-weight:900;color:var(--gold);line-height:1; }
+    .stat-card.pending .stat-num { color:var(--warning); }
+    .stat-card.completed .stat-num { color:var(--success); }
+    .stat-card.drivers .stat-num { color:var(--light-saffron); }
+
+    /* ===== ESCALATION PANEL ===== */
+    .escalation-section { padding:20px clamp(16px,3%,40px) 0; }
+    .escalation-header {
+      display:flex;align-items:center;justify-content:space-between;
+      background:linear-gradient(135deg,rgba(239,68,68,0.1),rgba(249,115,22,0.06));
+      border:1px solid rgba(239,68,68,0.2);border-radius:var(--radius-lg);
+      padding:16px 20px;margin-bottom:14px;
+    }
+    .escalation-header-left { display:flex;align-items:center;gap:10px; }
+    .escalation-title { font-size:16px;font-weight:800;color:#F87171; }
+    .escalation-subtitle { font-size:12px;color:rgba(255,248,240,0.55);margin-top:2px; }
+    #no-escalation {
+      display:flex;align-items:center;gap:12px;padding:20px;
+      background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:var(--radius-lg);
+      color:rgba(34,197,94,0.8);font-size:14px;font-weight:600;
+    }
+    #escalation-cards { display:flex;flex-direction:column;gap:12px; }
+    .escalation-card { border-width:1px;border-style:solid;border-radius:var(--radius-lg);padding:18px;transition:all 0.3s; }
+    .escalation-card.escalation-critical { animation:critical-pulse 2s ease-in-out infinite; }
+    @keyframes critical-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.2)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)} }
+    .esc-card-header { display:flex;align-items:center;gap:10px;margin-bottom:10px; }
+    .esc-badge { color:white;padding:4px 12px;border-radius:var(--radius-pill);font-size:11px;font-weight:700; }
+    .esc-time { font-size:13px;color:rgba(255,248,240,0.6);font-weight:600; }
+    .esc-id { margin-left:auto;font-family:monospace;font-size:12px;color:rgba(255,248,240,0.4); }
+    .esc-card-body { display:flex;flex-direction:column;gap:5px;margin-bottom:14px; }
+    .esc-name { font-size:14px;font-weight:700;color:var(--cream); }
+    .esc-route { font-size:13px;color:rgba(255,248,240,0.7); }
+    .esc-trip { font-size:12px;color:rgba(255,248,240,0.5); }
+    .esc-card-actions { display:flex;gap:8px;flex-wrap:wrap; }
+    .btn-wa-esc { background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.35);color:#F87171;padding:7px 14px;border-radius:var(--radius-pill);font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.2s; }
+    .btn-wa-esc:hover { background:rgba(239,68,68,0.4); }
+    .btn-wa-passenger { background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);color:#25D366;padding:7px 14px;border-radius:var(--radius-pill);font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.2s; }
+    .btn-wa-passenger:hover { background:rgba(37,211,102,0.25); }
+    .btn-call { background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);color:#60A5FA;padding:7px 14px;border-radius:var(--radius-pill);font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all 0.2s; }
+    .btn-call:hover { background:rgba(59,130,246,0.25); }
+    /* Row escalation styling */
+    .esc-row-warning td { background:rgba(245,158,11,0.06)!important; }
+    .esc-row-urgent td  { background:rgba(249,115,22,0.1)!important; }
+    .esc-row-critical td { background:rgba(239,68,68,0.12)!important;animation:critical-pulse 2.5s ease-in-out infinite; }
+    .esc-row-badge { padding:3px 8px;border-radius:var(--radius-pill);font-size:10px;font-weight:700;white-space:nowrap; }
+    .esc-row-badge.esc-warning  { background:rgba(245,158,11,0.2);color:#F59E0B;border:1px solid rgba(245,158,11,0.3); }
+    .esc-row-badge.esc-urgent   { background:rgba(249,115,22,0.2);color:#F97316;border:1px solid rgba(249,115,22,0.3); }
+    .esc-row-badge.esc-critical { background:rgba(239,68,68,0.25);color:#EF4444;border:1px solid rgba(239,68,68,0.4); }
+    .btn-wa-esc-sm { background:rgba(239,68,68,0.15);color:#F87171;width:auto!important;padding:0 8px;font-size:14px; }
+
+    /* TABS */
+    .dash-tabs { display:flex;gap:4px;padding:20px clamp(16px,3%,40px) 0;flex-wrap:wrap; }
+    .dash-tab { padding:9px 18px;border-radius:var(--radius-pill);font-size:13px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:rgba(255,248,240,0.55);transition:all 0.25s;font-family:inherit; }
+    .dash-tab.active { background:linear-gradient(135deg,rgba(255,107,0,0.25),rgba(245,200,66,0.15));border-color:rgba(245,200,66,0.35);color:var(--gold); }
+    .dash-tab:hover:not(.active) { background:rgba(255,255,255,0.08);color:var(--cream); }
+
+    /* PANELS */
+    .dash-panel { display:none;padding:16px clamp(16px,3%,40px) 60px; }
+    .dash-panel.active { display:block; }
+
+    /* TOOLBAR */
+    .dash-toolbar { display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap; }
+    .search-input { background:rgba(255,255,255,0.05);border:1px solid rgba(245,200,66,0.2);color:var(--cream);padding:9px 16px;border-radius:var(--radius-pill);font-size:14px;font-family:inherit;width:220px;outline:none;transition:all 0.2s; }
+    .search-input:focus { border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,200,66,0.1); }
+    .filter-btn { padding:7px 14px;border-radius:var(--radius-pill);font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:rgba(255,248,240,0.6);transition:all 0.2s;font-family:inherit; }
+    .filter-btn.active { background:rgba(245,200,66,0.2);border-color:rgba(245,200,66,0.4);color:var(--gold); }
+    .dash-actions { margin-left:auto;display:flex;gap:8px;flex-wrap:wrap; }
+
+    /* TABLE */
+    .dash-table-wrap { background:rgba(255,255,255,0.025);border:1px solid rgba(245,200,66,0.1);border-radius:var(--radius-lg);overflow:auto; }
+    table { width:100%;border-collapse:collapse;min-width:900px; }
+    th { background:rgba(245,200,66,0.07);color:rgba(255,248,240,0.5);padding:11px 14px;text-align:left;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;white-space:nowrap; }
+    td { padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;vertical-align:middle; }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:rgba(255,255,255,0.02); }
+    .empty-state { text-align:center;padding:48px 20px!important; }
+    .empty-icon { font-size:32px;margin-bottom:8px; }
+    .empty-text { color:rgba(255,248,240,0.35);font-size:14px; }
+    .booking-id-cell { font-family:monospace;font-size:12px;color:var(--gold);background:rgba(245,200,66,0.08);padding:3px 8px;border-radius:6px; }
+    .passenger-name { font-weight:600;font-size:13px; }
+    .passenger-phone { font-size:12px;color:rgba(255,248,240,0.5);margin-top:2px; }
+    .route-cell { display:flex;gap:4px;align-items:center;flex-wrap:wrap; }
+    .route-from-cell,.route-to-cell { font-size:11px; }
+    .route-to-cell { color:var(--gold);font-weight:600; }
+    .route-arrow { color:var(--saffron);font-size:11px; }
+    .action-btns { display:flex;gap:5px;flex-wrap:nowrap; }
+    .action-btn { width:30px;height:30px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;text-decoration:none;font-family:inherit; }
+    .btn-confirm { background:rgba(34,197,94,0.15);color:#4ADE80; }
+    .btn-confirm:hover { background:rgba(34,197,94,0.3); }
+    .btn-complete { background:rgba(59,130,246,0.15);color:#60A5FA; }
+    .btn-complete:hover { background:rgba(59,130,246,0.3); }
+    .btn-cancel { background:rgba(239,68,68,0.15);color:#F87171; }
+    .btn-cancel:hover { background:rgba(239,68,68,0.3); }
+    .btn-wa { background:rgba(37,211,102,0.15);color:#25D366; }
+    .btn-wa:hover { background:rgba(37,211,102,0.3); }
+
+    /* ACTIVITY FEED */
+    #activity-feed { display:flex;flex-direction:column;gap:0; }
+    .activity-item { display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05); }
+    .activity-item:last-child { border-bottom:none; }
+    .activity-icon { font-size:20px;flex-shrink:0; }
+    .activity-body { flex:1; }
+    .activity-title { font-size:13px;font-weight:600;color:var(--cream); }
+    .activity-meta { font-size:11px;color:rgba(255,248,240,0.4);margin-top:2px; }
+    .badge-sm { font-size:10px;padding:3px 8px; }
+
+    /* OVERVIEW GRID */
+    .overview-grid { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
+    @media(max-width:768px) { .overview-grid { grid-template-columns:1fr; } .stats-row { grid-template-columns:1fr 1fr; } }
+    .overview-card { background:rgba(255,255,255,0.03);border:1px solid rgba(245,200,66,0.1);border-radius:var(--radius-lg);padding:22px; }
+    .overview-card h3 { font-size:14px;font-weight:700;margin-bottom:14px;color:var(--gold); }
+
+    /* ===== NOTIFICATION TEMPLATES PANEL ===== */
+    .notif-templates-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px; }
+    .notif-template-card {
+      background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);
+      border-radius:var(--radius-md);padding:16px;cursor:pointer;transition:all 0.25s;
+    }
+    .notif-template-card:hover { border-color:rgba(245,200,66,0.4);background:rgba(245,200,66,0.05);transform:translateY(-2px); }
+    .notif-template-card.warning { border-color:rgba(245,158,11,0.3); }
+    .notif-template-card.urgent  { border-color:rgba(249,115,22,0.3); }
+    .notif-template-card.critical { border-color:rgba(239,68,68,0.3);animation:critical-pulse 2.5s ease-in-out infinite; }
+    .notif-icon { font-size:28px;margin-bottom:8px; }
+    .notif-name { font-size:13px;font-weight:700;color:var(--cream); }
+    .notif-desc { font-size:11px;color:rgba(255,248,240,0.5);margin-top:4px;line-height:1.5; }
+    .notif-recipient { font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-top:8px;color:rgba(255,248,240,0.4); }
+
+    /* ===== MODALS ===== */
+    .modal-overlay { display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px; }
+    .modal-box { background:#160700;border:1px solid rgba(245,200,66,0.2);border-radius:var(--radius-lg);padding:28px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto; }
+    .modal-box.wide { max-width:680px; }
+    .modal-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:20px; }
+    .modal-header h3 { font-size:18px;font-weight:800; }
+    .modal-close { background:rgba(255,255,255,0.08);border:none;color:var(--cream);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;font-family:inherit; }
+    .modal-close:hover { background:rgba(255,255,255,0.2); }
+
+    /* NOTIFICATION PREVIEW MODAL */
+    .notif-preview-box {
+      background:#0A0400;border:1px solid rgba(245,200,66,0.15);border-radius:var(--radius-md);
+      padding:16px;margin:16px 0;font-family:monospace;font-size:13px;line-height:1.7;
+      color:rgba(255,248,240,0.85);white-space:pre-wrap;word-break:break-word;max-height:360px;overflow-y:auto;
+    }
+    .notif-actions { display:flex;gap:10px;margin-top:16px;flex-wrap:wrap; }
+
+    /* AUTOMATION PIPELINE VISUALIZATION */
+    .pipeline-container { overflow-x:auto;padding:20px 0; }
+    .pipeline { display:flex;align-items:center;gap:0;min-width:max-content; }
+    .pipeline-step {
+      display:flex;flex-direction:column;align-items:center;gap:6px;
+      background:rgba(255,255,255,0.04);border:1px solid rgba(245,200,66,0.15);
+      border-radius:var(--radius-lg);padding:16px;width:140px;text-align:center;position:relative;
+    }
+    .pipeline-step.trigger { border-color:rgba(245,200,66,0.4);background:rgba(245,200,66,0.08); }
+    .pipeline-step.action { border-color:rgba(255,107,0,0.3);background:rgba(255,107,0,0.06); }
+    .pipeline-step.notify { border-color:rgba(37,211,102,0.3);background:rgba(37,211,102,0.06); }
+    .pipeline-step.escalate { border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.06); }
+    .pipeline-arrow { width:32px;height:2px;background:linear-gradient(90deg,rgba(245,200,66,0.3),rgba(255,107,0,0.3));flex-shrink:0;position:relative; }
+    .pipeline-arrow::after { content:'▶';position:absolute;right:-6px;top:-8px;color:var(--saffron);font-size:12px; }
+    .pipeline-icon { font-size:28px; }
+    .pipeline-label { font-size:11px;font-weight:700;color:var(--cream); }
+    .pipeline-desc { font-size:10px;color:rgba(255,248,240,0.5);line-height:1.4; }
+    .scenario-section { margin-bottom:32px; }
+    .scenario-header { display:flex;align-items:center;gap:12px;margin-bottom:16px; }
+    .scenario-num { width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--deep-saffron));color:white;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+    .scenario-title { font-size:16px;font-weight:700;color:var(--cream); }
+    .scenario-trigger { font-size:11px;color:var(--saffron);font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-top:2px; }
+
+    /* GOOGLE SHEETS TABLE */
+    .sheets-table { width:100%;border-collapse:collapse;font-size:12px;margin-top:12px; }
+    .sheets-table th { background:rgba(34,197,94,0.1);color:rgba(34,197,94,0.9);padding:8px 12px;text-align:left;font-size:11px; }
+    .sheets-table td { padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(255,248,240,0.7); }
+    .sheets-table tr:hover td { background:rgba(255,255,255,0.02); }
+    .sheets-col { font-weight:700;color:var(--gold);font-family:monospace; }
+    .sheets-type { color:rgba(255,248,240,0.4);font-size:11px; }
+    .sheets-example { color:rgba(255,248,240,0.55); }
+  </style>
+</head>
+<body>
+<div id="page-loader"><div class="loader-om">ॐ</div><div class="loader-bar"><div class="loader-progress"></div></div></div>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-om">ॐ</div>
+    <div class="login-title">Devghar<span>Cabs</span> Admin</div>
+    <div class="login-sub">🙏 Welcome, Raja Bhaiya. Enter your PIN to access the command centre.</div>
+    <div style="margin-bottom:12px">
+      <input class="pin-input form-input" type="password" id="pin-input" placeholder="• • • •" maxlength="4" inputmode="numeric" />
+    </div>
+    <div id="pin-error">❌ Wrong PIN. Please try again.</div>
+    <button class="btn btn-primary btn-full" onclick="submitPin()" style="font-size:16px;padding:16px;">🔓 Access Dashboard</button>
+    <p class="pin-hint">Enter your 4-digit PIN to access the dashboard</p>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD MAIN ===== -->
+<div id="dashboard-main">
+
+  <!-- NAV -->
+  <div class="dash-nav">
+    <div class="dash-brand">
+      <span class="om">ॐ</span>
+      Devghar<span class="gold">Cabs</span>
+      <span style="color:rgba(255,248,240,0.3);font-weight:400;font-size:13px;">Command Centre</span>
+    </div>
+    <div class="dash-nav-right">
+      <span class="dash-time" id="dash-clock"></span>
+      <span id="escalation-header-badge">🔴 0 CRITICAL</span>
+      <a href="index.html" class="btn btn-ghost btn-sm" target="_blank">🌐 Site</a>
+      <button class="btn btn-primary btn-sm" onclick="openManualBooking()">+ Add Booking</button>
+      <button class="dash-logout" onclick="logout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon">📋</div>
+      <div class="stat-label">Total Bookings</div>
+      <div class="stat-num" id="stat-total">0</div>
+    </div>
+    <div class="stat-card pending">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-label">Pending</div>
+      <div class="stat-num" id="stat-pending">0</div>
+    </div>
+    <div class="stat-card completed">
+      <div class="stat-icon">✅</div>
+      <div class="stat-label">Completed</div>
+      <div class="stat-num" id="stat-completed">0</div>
+    </div>
+    <div class="stat-card drivers">
+      <div class="stat-icon">🚗</div>
+      <div class="stat-label">Active Drivers</div>
+      <div class="stat-num" id="stat-drivers">0</div>
+    </div>
+  </div>
+
+  <!-- ESCALATION PANEL -->
+  <div class="escalation-section">
+    <div class="escalation-header">
+      <div class="escalation-header-left">
+        <div>
+          <div class="escalation-title">🚨 Escalation Monitor — Live</div>
+          <div class="escalation-subtitle">Pending bookings that need your immediate attention. Checked every 60 seconds.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span style="font-size:12px;color:rgba(255,248,240,0.4);"><span style="color:#F59E0B">⚠️ 15min</span> → <span style="color:#F97316">🟠 30min</span> → <span style="color:#EF4444">🔴 60min</span></span>
+        <button class="btn btn-ghost btn-sm" onclick="renderEscalationPanel()">🔄 Refresh</button>
+      </div>
+    </div>
+    <div id="no-escalation">
+      <span style="font-size:24px">✅</span>
+      <div>
+        <div style="font-weight:700;">All Clear — No Escalations</div>
+        <div style="font-size:12px;color:rgba(34,197,94,0.7);margin-top:2px;">All pending bookings are within the 15-minute response window.</div>
+      </div>
+    </div>
+    <div id="escalation-cards"></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="dash-tabs">
+    <button class="dash-tab active" data-tab="bookings" onclick="switchTab('bookings')">📋 Bookings</button>
+    <button class="dash-tab" data-tab="drivers" onclick="switchTab('drivers')">🚗 Drivers</button>
+    <button class="dash-tab" data-tab="templates" onclick="switchTab('templates')">💬 WA Templates</button>
+    <button class="dash-tab" data-tab="automation" onclick="switchTab('automation')">⚙️ Automation Setup</button>
+    <button class="dash-tab" data-tab="overview" onclick="switchTab('overview')">📊 Overview</button>
+  </div>
+
+  <!-- ===== BOOKINGS PANEL ===== -->
+  <div class="dash-panel active" id="panel-bookings">
+    <div class="dash-toolbar">
+      <input class="search-input" type="text" id="booking-search" placeholder="🔍 Search name, phone, ID..." />
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">All</button>
+      <button class="filter-btn" data-filter="pending" onclick="setFilter('pending')">⏳ Pending</button>
+      <button class="filter-btn" data-filter="confirmed" onclick="setFilter('confirmed')">✅ Confirmed</button>
+      <button class="filter-btn" data-filter="driver_assigned" onclick="setFilter('driver_assigned')">🚗 Driver Assigned</button>
+      <button class="filter-btn" data-filter="completed" onclick="setFilter('completed')">🏁 Completed</button>
+      <button class="filter-btn" data-filter="cancelled" onclick="setFilter('cancelled')">❌ Cancelled</button>
+      <div class="dash-actions">
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">📥 Export CSV</button>
+        <button class="btn btn-primary btn-sm" onclick="openManualBooking()">+ Add Booking</button>
+      </div>
+    </div>
+    <div class="dash-table-wrap">
+      <table>
+        <thead><tr>
+          <th>Booking ID</th><th>Passenger</th><th>Route</th><th>Vehicle</th>
+          <th>Date / Time</th><th>Status</th><th>Escalation</th><th>Time</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="bookings-tbody">
+          <tr><td colspan="9" class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">No bookings yet. <a href="booking.html" style="color:var(--gold)" target="_blank">Create a test booking</a></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== DRIVERS PANEL ===== -->
+  <div class="dash-panel" id="panel-drivers">
+    <div class="dash-toolbar">
+      <span style="font-size:14px;color:rgba(255,248,240,0.6);">Driver Applications & Status Management</span>
+      <div class="dash-actions">
+        <button class="btn btn-primary btn-sm" onclick="openAddDriverModal()">➕ Add Driver</button>
+        <a href="driver.html" class="btn btn-ghost btn-sm" target="_blank">📢 Share Driver Page</a>
+      </div>
+    </div>
+    <div class="dash-table-wrap">
+      <table>
+        <thead><tr><th>Driver ID</th><th>Name</th><th>Vehicle</th><th>License</th><th>Availability</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="drivers-tbody">
+          <tr><td colspan="7" class="empty-state"><div class="empty-icon">🚗</div><div class="empty-text">No driver applications yet</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== WHATSAPP TEMPLATES PANEL ===== -->
+  <div class="dash-panel" id="panel-templates">
+    <div style="margin-bottom:20px;">
+      <h3 style="font-size:18px;font-weight:800;margin-bottom:6px;">💬 WhatsApp Notification Templates</h3>
+      <p style="font-size:14px;color:rgba(255,248,240,0.6);">Click any template to preview the exact WhatsApp message. The first booking in your list will be used as a sample.</p>
+    </div>
+    <div class="notif-templates-grid">
+      <div class="notif-template-card" onclick="showNotificationPreview('new')">
+        <div class="notif-icon">🆕</div>
+        <div class="notif-name">New Booking Alert</div>
+        <div class="notif-desc">Sent to Raja Bhaiya when a new booking is received. Includes all booking details + CONFIRM/CANCEL/DRIVER commands.</div>
+        <div class="notif-recipient">→ TO: RAJA BHAIYA</div>
+      </div>
+      <div class="notif-template-card" onclick="showNotificationPreview('confirmed')">
+        <div class="notif-icon">✅</div>
+        <div class="notif-name">Booking Confirmed</div>
+        <div class="notif-desc">Sent to passenger when Raja Bhaiya confirms their booking. Warm, devotional tone in English.</div>
+        <div class="notif-recipient">→ TO: PASSENGER</div>
+      </div>
+      <div class="notif-template-card" onclick="showNotificationPreview('driver')">
+        <div class="notif-icon">🚗</div>
+        <div class="notif-name">Driver Assigned</div>
+        <div class="notif-desc">Sent to passenger with driver's name & phone number. Includes direct call links.</div>
+        <div class="notif-recipient">→ TO: PASSENGER</div>
+      </div>
+      <div class="notif-template-card" onclick="showNotificationPreview('completed')">
+        <div class="notif-icon">🏁</div>
+        <div class="notif-name">Trip Completed</div>
+        <div class="notif-desc">Summary sent to Raja Bhaiya when trip is marked done. Cash collection reminder.</div>
+        <div class="notif-recipient">→ TO: RAJA BHAIYA</div>
+      </div>
+      <div class="notif-template-card warning" onclick="showNotificationPreview('warning')">
+        <div class="notif-icon">⚠️</div>
+        <div class="notif-name">Escalation — WARNING</div>
+        <div class="notif-desc">15–30 minutes unresponded. Gentle reminder to confirm booking. Yellow urgency.</div>
+        <div class="notif-recipient" style="color:#F59E0B;">→ ESCALATION LEVEL 1</div>
+      </div>
+      <div class="notif-template-card urgent" onclick="showNotificationPreview('urgent')">
+        <div class="notif-icon">🟠</div>
+        <div class="notif-name">Escalation — URGENT</div>
+        <div class="notif-desc">30–60 minutes unresponded. Stronger language: "ग्राहक रद्द कर सकता है!" Orange urgency.</div>
+        <div class="notif-recipient" style="color:#F97316;">→ ESCALATION LEVEL 2</div>
+      </div>
+      <div class="notif-template-card critical" onclick="showNotificationPreview('critical')">
+        <div class="notif-icon">🔴</div>
+        <div class="notif-name">Escalation — CRITICAL</div>
+        <div class="notif-desc">60+ minutes unresponded. Urgent caps-lock format with pulse animation. "तुरंत जवाब दें!" Red urgency.</div>
+        <div class="notif-recipient" style="color:#EF4444;">→ ESCALATION LEVEL 3</div>
+      </div>
+      <div class="notif-template-card" onclick="showNotificationPreview('daily')">
+        <div class="notif-icon">📊</div>
+        <div class="notif-name">Daily Summary (6 AM)</div>
+        <div class="notif-desc">Morning summary of all bookings, today's trips, and pending actions. Automated via Make.com.</div>
+        <div class="notif-recipient">→ TO: RAJA BHAIYA</div>
+      </div>
+    </div>
+    <div style="margin-top:28px;background:rgba(245,200,66,0.06);border:1px solid rgba(245,200,66,0.2);border-radius:var(--radius-lg);padding:20px;">
+      <h4 style="font-size:14px;font-weight:700;color:var(--gold);margin-bottom:12px;">💡 WhatsApp Command Shortcuts (for Raja Bhaiya)</h4>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;font-size:13px;">
+        <div style="background:rgba(255,255,255,0.04);padding:12px;border-radius:var(--radius-md);"><strong style="color:var(--gold);font-family:monospace;">CONFIRM DGC-123456</strong><br/><span style="color:rgba(255,248,240,0.6);">Mark booking as confirmed</span></div>
+        <div style="background:rgba(255,255,255,0.04);padding:12px;border-radius:var(--radius-md);"><strong style="color:var(--gold);font-family:monospace;">CANCEL DGC-123456</strong><br/><span style="color:rgba(255,248,240,0.6);">Cancel a booking</span></div>
+        <div style="background:rgba(255,255,255,0.04);padding:12px;border-radius:var(--radius-md);"><strong style="color:var(--gold);font-family:monospace;">DRIVER DGC-123456 Suresh 9876543210</strong><br/><span style="color:rgba(255,248,240,0.6);">Assign driver + notify passenger</span></div>
+        <div style="background:rgba(255,255,255,0.04);padding:12px;border-radius:var(--radius-md);"><strong style="color:var(--gold);font-family:monospace;">DONE DGC-123456</strong><br/><span style="color:rgba(255,248,240,0.6);">Mark trip as completed</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== AUTOMATION PANEL ===== -->
+  <div class="dash-panel" id="panel-automation">
+    <div style="margin-bottom:24px;">
+      <h3 style="font-size:20px;font-weight:800;margin-bottom:6px;">⚙️ Automation Workflow — Make.com + Google Sheets</h3>
+      <p style="font-size:14px;color:rgba(255,248,240,0.6);line-height:1.7;">These 4 automation scenarios handle Raja Bhaiya's entire workflow automatically. Set them up once in Make.com (formerly Integromat) — it's free for up to 1,000 operations/month.</p>
+      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+        <a href="https://make.com" target="_blank" class="btn btn-gold btn-sm">🔗 Open Make.com</a>
+        <a href="https://sheets.new" target="_blank" class="btn btn-ghost btn-sm">📊 Create Google Sheet</a>
+        <button class="btn btn-ghost btn-sm" onclick="exportMakeGuide()">📥 Download Setup Guide</button>
+      </div>
+    </div>
+
+    <!-- SCENARIO 1 -->
+    <div class="scenario-section">
+      <div class="scenario-header">
+        <div class="scenario-num">1</div>
+        <div>
+          <div class="scenario-title">🆕 New Booking Handler</div>
+          <div class="scenario-trigger">TRIGGER: Webhook — fires when booking form submitted</div>
+        </div>
+      </div>
+      <div class="pipeline-container">
+        <div class="pipeline">
+          <div class="pipeline-step trigger"><div class="pipeline-icon">🌐</div><div class="pipeline-label">Website Form</div><div class="pipeline-desc">Passenger submits booking</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step action"><div class="pipeline-icon">📊</div><div class="pipeline-label">Google Sheets</div><div class="pipeline-desc">Append row to BookingsDB</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step notify"><div class="pipeline-icon">💬</div><div class="pipeline-label">WhatsApp API</div><div class="pipeline-desc">NEW_BOOKING alert to Raja Bhaiya</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step action"><div class="pipeline-icon">⏰</div><div class="pipeline-label">15-min Timer</div><div class="pipeline-desc">Wait 15 minutes</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step action"><div class="pipeline-icon">🔍</div><div class="pipeline-label">Check Status</div><div class="pipeline-desc">Is still PENDING?</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step escalate"><div class="pipeline-icon">⚠️</div><div class="pipeline-label">Send Warning</div><div class="pipeline-desc">Escalation L1 if no action</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENARIO 2 -->
+    <div class="scenario-section">
+      <div class="scenario-header">
+        <div class="scenario-num">2</div>
+        <div>
+          <div class="scenario-title">⚠️ Escalation Monitor</div>
+          <div class="scenario-trigger">TRIGGER: Schedule — runs every 15 minutes, 24/7</div>
+        </div>
+      </div>
+      <div class="pipeline-container">
+        <div class="pipeline">
+          <div class="pipeline-step trigger"><div class="pipeline-icon">⏰</div><div class="pipeline-label">Scheduler</div><div class="pipeline-desc">Every 15 min</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step action"><div class="pipeline-icon">📊</div><div class="pipeline-label">Fetch Pending</div><div class="pipeline-desc">Filter Status = PENDING</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step action"><div class="pipeline-icon">🧮</div><div class="pipeline-label">Calc Time</div><div class="pipeline-desc">Minutes since created</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step action"><div class="pipeline-icon">🔀</div><div class="pipeline-label">Route Level</div><div class="pipeline-desc">15m→⚠️ 30m→🟠 60m→🔴</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step escalate"><div class="pipeline-icon">💬</div><div class="pipeline-label">Send Alert</div><div class="pipeline-desc">Level-appropriate WhatsApp</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step action"><div class="pipeline-icon">📝</div><div class="pipeline-label">Log Event</div><div class="pipeline-desc">Update EscalationLog sheet</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENARIO 3 -->
+    <div class="scenario-section">
+      <div class="scenario-header">
+        <div class="scenario-num">3</div>
+        <div>
+          <div class="scenario-title">💬 WhatsApp Command Processor</div>
+          <div class="scenario-trigger">TRIGGER: WhatsApp Business API Webhook — fires when Raja Bhaiya replies</div>
+        </div>
+      </div>
+      <div class="pipeline-container">
+        <div class="pipeline">
+          <div class="pipeline-step trigger"><div class="pipeline-icon">💬</div><div class="pipeline-label">WA Reply</div><div class="pipeline-desc">Raja Bhaiya replies: CONFIRM DGC-123456</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step action"><div class="pipeline-icon">🔍</div><div class="pipeline-label">Parse Command</div><div class="pipeline-desc">Action + Booking ID</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step action"><div class="pipeline-icon">📊</div><div class="pipeline-label">Update Sheet</div><div class="pipeline-desc">Change status in Google Sheet</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step notify"><div class="pipeline-icon">📱</div><div class="pipeline-label">Notify Passenger</div><div class="pipeline-desc">CONFIRMED message via WhatsApp</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step notify"><div class="pipeline-icon">✅</div><div class="pipeline-label">Acknowledge RB</div><div class="pipeline-desc">"Done! DGC-123456 confirmed."</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENARIO 4 -->
+    <div class="scenario-section">
+      <div class="scenario-header">
+        <div class="scenario-num">4</div>
+        <div>
+          <div class="scenario-title">📊 Daily Summary Report</div>
+          <div class="scenario-trigger">TRIGGER: Schedule — daily at 6:00 AM IST</div>
+        </div>
+      </div>
+      <div class="pipeline-container">
+        <div class="pipeline">
+          <div class="pipeline-step trigger"><div class="pipeline-icon">🌅</div><div class="pipeline-label">6 AM Trigger</div><div class="pipeline-desc">Daily at 6:00 AM IST</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step action"><div class="pipeline-icon">📊</div><div class="pipeline-label">Fetch All</div><div class="pipeline-desc">Today's bookings from Sheet</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step action"><div class="pipeline-icon">📈</div><div class="pipeline-label">Build Report</div><div class="pipeline-desc">Count by status</div></div>
+          <div class="pipeline-arrow"></div>
+          <div class="pipeline-step notify"><div class="pipeline-icon">💬</div><div class="pipeline-label">Send Summary</div><div class="pipeline-desc">Daily WhatsApp to Raja Bhaiya</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOOGLE SHEETS STRUCTURE -->
+    <div style="background:rgba(34,197,94,0.04);border:1px solid rgba(34,197,94,0.15);border-radius:var(--radius-lg);padding:22px;margin-top:8px;">
+      <h4 style="font-size:16px;font-weight:700;color:rgba(34,197,94,0.9);margin-bottom:4px;">📊 Google Sheet — BookingsDB Column Structure</h4>
+      <p style="font-size:13px;color:rgba(255,248,240,0.55);margin-bottom:0;">Create a Google Sheet with these exact column headers (Row 1). Make.com will read/write to these columns.</p>
+      <div style="overflow-x:auto;">
+        <table class="sheets-table">
+          <thead><tr><th>Col</th><th>Field Name</th><th>Type</th><th>Example Value</th></tr></thead>
+          <tbody>
+            <tr><td class="sheets-col">A</td><td>BookingID</td><td class="sheets-type">Text</td><td class="sheets-example">DGC-123456</td></tr>
+            <tr><td class="sheets-col">B</td><td>Timestamp</td><td class="sheets-type">DateTime</td><td class="sheets-example">2024-06-14 09:30:00</td></tr>
+            <tr><td class="sheets-col">C</td><td>PassengerName</td><td class="sheets-type">Text</td><td class="sheets-example">Ramesh Kumar</td></tr>
+            <tr><td class="sheets-col">D</td><td>PassengerPhone</td><td class="sheets-type">Number</td><td class="sheets-example">9876543210</td></tr>
+            <tr><td class="sheets-col">E</td><td>Pickup</td><td class="sheets-type">Text</td><td class="sheets-example">Jasidih Rly. Station</td></tr>
+            <tr><td class="sheets-col">F</td><td>Dropoff</td><td class="sheets-type">Text</td><td class="sheets-example">Baidyanath Dham Temple</td></tr>
+            <tr><td class="sheets-col">G</td><td>VehicleType</td><td class="sheets-type">Text</td><td class="sheets-example">Hatchback / Sedan</td></tr>
+            <tr><td class="sheets-col">H</td><td>TravelDate</td><td class="sheets-type">Date</td><td class="sheets-example">2024-06-14</td></tr>
+            <tr><td class="sheets-col">I</td><td>TravelTime</td><td class="sheets-type">Text</td><td class="sheets-example">10:30 AM</td></tr>
+            <tr><td class="sheets-col">J</td><td>Passengers</td><td class="sheets-type">Number</td><td class="sheets-example">3</td></tr>
+            <tr><td class="sheets-col">K</td><td>SpecialNote</td><td class="sheets-type">Text</td><td class="sheets-example">Elderly passenger</td></tr>
+            <tr><td class="sheets-col">L</td><td>Status</td><td class="sheets-type">Text</td><td class="sheets-example">PENDING</td></tr>
+            <tr><td class="sheets-col">M</td><td>DriverName</td><td class="sheets-type">Text</td><td class="sheets-example">Suresh Yadav</td></tr>
+            <tr><td class="sheets-col">N</td><td>DriverPhone</td><td class="sheets-type">Number</td><td class="sheets-example">9123456789</td></tr>
+            <tr><td class="sheets-col">O</td><td>UpdatedAt</td><td class="sheets-type">DateTime</td><td class="sheets-example">2024-06-14 09:45:00</td></tr>
+            <tr><td class="sheets-col">P</td><td>EscalationLevel</td><td class="sheets-type">Text</td><td class="sheets-example">WARNING</td></tr>
+            <tr><td class="sheets-col">Q</td><td>EscalationCount</td><td class="sheets-type">Number</td><td class="sheets-example">2</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SETUP STEPS -->
+    <div style="background:rgba(255,107,0,0.05);border:1px solid rgba(255,107,0,0.2);border-radius:var(--radius-lg);padding:22px;margin-top:20px;">
+      <h4 style="font-size:16px;font-weight:700;color:var(--saffron);margin-bottom:16px;">🚀 Quick Setup — 4 Steps to Full Automation</h4>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="min-width:28px;height:28px;border-radius:50%;background:var(--saffron);color:white;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;">1</div>
+          <div><strong style="color:var(--cream);">Create Google Sheet</strong><br/><span style="font-size:13px;color:rgba(255,248,240,0.6);">Go to sheets.google.com → New → Add column headers from the table above (Row 1). Name the sheet "BookingsDB".</span></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="min-width:28px;height:28px;border-radius:50%;background:var(--saffron);color:white;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;">2</div>
+          <div><strong style="color:var(--cream);">Register on Make.com</strong><br/><span style="font-size:13px;color:rgba(255,248,240,0.6);">Go to make.com → Create free account → New Scenario → Click "+" to add a Webhook trigger module. Copy the Webhook URL.</span></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="min-width:28px;height:28px;border-radius:50%;background:var(--saffron);color:white;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;">3</div>
+          <div><strong style="color:var(--cream);">Connect WhatsApp Business</strong><br/><span style="font-size:13px;color:rgba(255,248,240,0.6);">In Make.com, add the "WhatsApp Business" module. Connect your WhatsApp Business number (+91 76430 81977). Use the notification templates from the WA Templates tab.</span></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="min-width:28px;height:28px;border-radius:50%;background:var(--saffron);color:white;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;">4</div>
+          <div><strong style="color:var(--cream);">Set up Escalation Monitor</strong><br/><span style="font-size:13px;color:rgba(255,248,240,0.6);">Create Scenario 2 with a "Schedule" trigger set to every 15 minutes. Connect it to Google Sheets → filter PENDING → calculate time → route to appropriate WhatsApp message.</span></div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:rgba(245,200,66,0.08);border-radius:var(--radius-md);font-size:13px;color:rgba(255,248,240,0.7);">
+        💡 <strong>Recommended WhatsApp Provider for Make.com:</strong> Use <strong style="color:var(--gold);">AiSensy</strong> or <strong style="color:var(--gold);">Wati.io</strong> — both have Make.com integrations, cost ~₹999/month, and work with Indian WhatsApp numbers.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== OVERVIEW PANEL ===== -->
+  <div class="dash-panel" id="panel-overview">
+    <div class="overview-grid">
+      <div class="overview-card">
+        <h3>📱 Recent Activity</h3>
+        <div id="activity-feed"><div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">No activity yet</div></div></div>
+      </div>
+      <div class="overview-card">
+        <h3>📞 Quick Actions</h3>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <a href="https://wa.me/917643081977" target="_blank" class="btn btn-ghost" style="justify-content:flex-start;gap:10px;">💬 Open WhatsApp</a>
+          <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px;" onclick="exportCSV()">📥 Export Bookings CSV</button>
+          <button class="btn btn-ghost" style="justify-content:flex-start;gap:10px;" onclick="showNotificationPreview('daily')">📊 Preview Daily Report</button>
+          <a href="booking.html" target="_blank" class="btn btn-ghost" style="justify-content:flex-start;gap:10px;">📋 New Manual Booking</a>
+          <a href="driver.html" target="_blank" class="btn btn-ghost" style="justify-content:flex-start;gap:10px;">🚗 Driver Application Page</a>
+          <a href="index.html" target="_blank" class="btn btn-ghost" style="justify-content:flex-start;gap:10px;">🌐 View Live Website</a>
+        </div>
+      </div>
+      <div class="overview-card">
+        <h3>💡 Platform Tips</h3>
+        <div style="font-size:13px;color:rgba(255,248,240,0.6);line-height:1.8;">
+          <p>✅ Respond to pending bookings within 15 min to avoid escalations.</p>
+          <p>🟢 Toggle drivers online/offline based on their WhatsApp message.</p>
+          <p>📥 Export CSV every week to keep a local backup of all bookings.</p>
+          <p>🔱 During Shrawan, check dashboard every 2 hours. Book in advance!</p>
+          <p>💬 Use the WA Templates tab for copy-paste messages to passengers.</p>
+        </div>
+      </div>
+      <div class="overview-card">
+        <h3>🔱 Shrawan Season Status</h3>
+        <div id="shrawan-status" style="font-size:13px;color:rgba(255,248,240,0.6);line-height:1.8;"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end dashboard-main -->
+
+<!-- ===== ASSIGN DRIVER MODAL ===== -->
+<div id="assign-modal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>🚗 Confirm & Assign Driver</h3>
+      <button class="modal-close" onclick="closeAssignModal()">✕</button>
+    </div>
+    <input type="hidden" id="assign-booking-id" />
+    <div style="background:rgba(255,255,255,0.04);border-radius:var(--radius-md);padding:12px;margin-bottom:18px;font-size:13px;color:rgba(255,248,240,0.7);" id="assign-booking-info"></div>
+    <div class="form-group" style="margin-bottom:14px">
+      <label class="form-label">👤 Driver Name *</label>
+      <input class="form-input" id="assign-driver-name" type="text" placeholder="e.g. Suresh Yadav" />
+    </div>
+    <div class="form-group" style="margin-bottom:20px">
+      <label class="form-label">📱 Driver WhatsApp Number</label>
+      <div class="phone-row">
+        <input class="form-input phone-prefix" type="text" value="+91" readonly />
+        <input class="form-input" id="assign-driver-phone" type="tel" placeholder="10-digit number" maxlength="10" />
+      </div>
+    </div>
+    <div style="background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.2);border-radius:var(--radius-md);padding:12px;margin-bottom:18px;font-size:13px;color:rgba(255,248,240,0.7);">
+      💬 After assigning, WhatsApp will open to send the driver details to the passenger automatically.
+    </div>
+    <div style="display:flex;gap:12px;">
+      <button class="btn btn-ghost" onclick="closeAssignModal()">Cancel</button>
+      <button class="btn btn-primary" style="flex:1" onclick="submitAssignment()">✅ Assign & Notify Passenger</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADD DRIVER MODAL ===== -->
+<div id="add-driver-modal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>🚗 Add New Driver</h3>
+      <button class="modal-close" onclick="closeAddDriverModal()">✕</button>
+    </div>
+    <form id="add-driver-form">
+      <div class="form-row" style="margin-bottom:12px">
+        <div class="form-group"><label class="form-label">Name *</label><input class="form-input" id="d-name" type="text" placeholder="Driver name" required /></div>
+        <div class="form-group"><label class="form-label">Phone *</label><input class="form-input" id="d-phone" type="tel" placeholder="10-digit" maxlength="10" required /></div>
+      </div>
+      <div class="form-row" style="margin-bottom:12px">
+        <div class="form-group"><label class="form-label">Vehicle *</label>
+          <select class="form-select" id="d-vehicle" required><option value="">Select vehicle</option><option>Auto / E-Rickshaw</option><option>Hatchback / Sedan</option><option>SUV / Innova</option><option>Tempo Traveller</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">License/ID (Optional)</label><input class="form-input" id="d-license" type="text" placeholder="DL or Aadhar" /></div>
+      </div>
+      <div class="form-group" style="margin-bottom:18px"><label class="form-label">Initial Shift Duration</label>
+        <select class="form-select" id="d-shift">
+          <option value="0">Do not start shift yet (Offline)</option>
+          <option value="30">30 Minutes</option>
+          <option value="60">1 Hour</option>
+          <option value="240">4 Hours</option>
+          <option value="480">8 Hours</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        <button type="button" class="btn btn-ghost" onclick="closeAddDriverModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">✅ Save Driver</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== START SHIFT MODAL ===== -->
+<div id="start-shift-modal" class="modal-overlay">
+  <div class="modal-box" style="max-width:400px;">
+    <div class="modal-header">
+      <h3>⏳ Start Driver Shift</h3>
+      <button class="modal-close" onclick="closeStartShiftModal()">✕</button>
+    </div>
+    <div style="margin-bottom:16px;">
+      <p style="color:var(--cream);font-size:14px;">Select shift duration for <strong id="shift-driver-name" style="color:var(--gold);">Driver</strong></p>
+    </div>
+    <input type="hidden" id="shift-driver-id" />
+    <div class="form-group" style="margin-bottom:18px">
+      <select class="form-select" id="s-duration">
+        <option value="30">30 Minutes</option>
+        <option value="60">1 Hour</option>
+        <option value="120">2 Hours</option>
+        <option value="240">4 Hours</option>
+        <option value="480">8 Hours</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button class="btn btn-ghost" onclick="closeStartShiftModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitStartShift()">✅ Start Shift</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MANUAL BOOKING MODAL ===== -->
+<div id="manual-modal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>📋 Add Manual Booking</h3>
+      <button class="modal-close" onclick="closeManualBooking()">✕</button>
+    </div>
+    <form id="manual-booking-form">
+      <div class="form-row" style="margin-bottom:12px">
+        <div class="form-group"><label class="form-label">Name *</label><input class="form-input" id="m-name" type="text" placeholder="Passenger name" /></div>
+        <div class="form-group"><label class="form-label">Phone *</label><input class="form-input" id="m-phone" type="tel" placeholder="10-digit" maxlength="10" /></div>
+      </div>
+      <div class="form-row" style="margin-bottom:12px">
+        <div class="form-group"><label class="form-label">Pickup *</label>
+          <select class="form-select" id="m-pickup"><option value="">Select pickup</option><option>Jasidih Rly. Station</option><option>Deoghar Bus Stand</option><option>Baidyanath Dham Temple</option><option>Dumka</option><option>Giridih</option><option>Other</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Dropoff *</label>
+          <select class="form-select" id="m-dropoff"><option value="">Select dropoff</option><option>Baidyanath Dham Temple</option><option>Jasidih Rly. Station</option><option>Deoghar Bus Stand</option><option>Dumka</option><option>Giridih</option><option>Other</option></select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:12px"><label class="form-label">Vehicle</label>
+        <select class="form-select" id="m-vehicle"><option>Auto / E-Rickshaw</option><option>Hatchback / Sedan</option><option>SUV / Innova</option><option>Tempo Traveller</option></select>
+      </div>
+      <div class="form-row" style="margin-bottom:18px">
+        <div class="form-group"><label class="form-label">Date *</label><input class="form-input" id="m-date" type="date" /></div>
+        <div class="form-group"><label class="form-label">Time</label><input class="form-input" id="m-time" type="time" /></div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">✅ Add Booking</button>
+    </form>
+  </div>
+</div>
+
+<!-- ===== NOTIFICATION PREVIEW MODAL ===== -->
+<div id="notification-modal" class="modal-overlay">
+  <div class="modal-box wide">
+    <div class="modal-header">
+      <h3 id="notif-title">Template Preview</h3>
+      <button class="modal-close" onclick="closeNotificationModal()">✕</button>
+    </div>
+    <p style="font-size:13px;color:rgba(255,248,240,0.55);margin-bottom:12px;">This is the exact WhatsApp message that will be sent. Using first available booking as sample data.</p>
+    <div class="notif-preview-box" id="notif-body"></div>
+    <div class="notif-actions">
+      <button class="btn btn-ghost" onclick="copyNotifText()">📋 Copy Text</button>
+      <a id="notif-wa-link" href="#" target="_blank" class="btn btn-primary">💬 Open in WhatsApp</a>
+      <button class="btn btn-ghost" onclick="closeNotificationModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="js/main.js"></script>
+<script src="js/booking-engine.js"></script>
+<script src="js/dashboard.js"></script>
+<script>
+// Clock
+function updateClock() {
+  const el = document.getElementById('dash-clock');
+  if (el) el.textContent = new Date().toLocaleString('en-IN', { weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit' });
+}
+setInterval(updateClock, 1000); updateClock();
+
+// Shrawan tracker
+function updateShrawanStatus() {
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const el = document.getElementById('shrawan-status');
+  if (!el) return;
+  if (month === 7 || month === 8) {
+    el.innerHTML = '<span style="color:#4ADE80;font-size:15px;font-weight:700;">🟢 SHRAWAN SEASON IS ACTIVE!</span><br/>Peak demand period. Ensure maximum drivers are online. Check dashboard every 2 hours.';
+  } else {
+    const shrawan = new Date(now.getFullYear(), 6, 1);
+    if (now > shrawan) shrawan.setFullYear(now.getFullYear() + 1);
+    const days = Math.ceil((shrawan - now) / (1000 * 60 * 60 * 24));
+    el.innerHTML = `Shrawan starts in <strong style="color:var(--gold)">${days} days</strong> (July–August).<br/>Start driver onboarding preparation now.`;
+  }
+}
+updateShrawanStatus();
+
+// Export Make.com setup guide as text file
+function exportMakeGuide() {
+  const guide = `DevgharCabs — Make.com Automation Setup Guide
+==============================================
+
+STEP 1: Create Google Sheet
+- Go to sheets.google.com
+- Create new sheet named "DevgharCabs"
+- Add sheet tabs: "BookingsDB" and "EscalationLog"
+- BookingsDB columns (Row 1):
+  A: BookingID | B: Timestamp | C: PassengerName | D: PassengerPhone
+  E: Pickup | F: Dropoff | G: VehicleType | H: TravelDate | I: TravelTime
+  J: Passengers | K: SpecialNote | L: Status | M: DriverName | N: DriverPhone
+  O: UpdatedAt | P: EscalationLevel | Q: EscalationCount
+
+STEP 2: Register on Make.com
+- Go to make.com → Sign up free
+- Go to "Create a new scenario"
+- Add a "Webhooks > Custom Webhook" module
+- Click "Add" → Copy the Webhook URL
+- This URL will be your booking form's submission endpoint
+
+STEP 3: Build Scenario 1 — New Booking Handler
+Modules in order:
+1. Webhooks > Custom Webhook (trigger)
+2. Google Sheets > Add a Row (to BookingsDB)
+3. WhatsApp Business > Send a Message (to +91 76430 81977)
+   Message: [Use the NEW_BOOKING template from WA Templates tab]
+4. Tools > Sleep (900 seconds = 15 minutes)
+5. Google Sheets > Search Rows (find booking by ID)
+6. Router > If Status = "PENDING" → Send Warning Message
+
+STEP 4: Build Scenario 2 — Escalation Monitor
+1. Schedule (every 15 minutes)
+2. Google Sheets > Search Rows (Status = "PENDING")
+3. Array Aggregator
+4. Iterator
+5. Tools > Get Current Date
+6. Math > Calculate difference (minutes since Timestamp)
+7. Router:
+   - 15-30 min → WhatsApp WARNING template
+   - 30-60 min → WhatsApp URGENT template  
+   - 60+ min → WhatsApp CRITICAL template
+8. Google Sheets > Update Row (EscalationLevel, EscalationCount)
+
+STEP 5: Build Scenario 3 — WhatsApp Command Processor
+1. WhatsApp Business > Watch Messages (webhook)
+2. Text Parser > Match Pattern (CONFIRM|CANCEL|DRIVER + Booking ID)
+3. Router by command:
+   - CONFIRM → Update Sheet status + Send CONFIRMED to passenger
+   - CANCEL → Update Sheet status
+   - DRIVER → Update Sheet + Send DRIVER_ASSIGNED to passenger
+4. WhatsApp > Send acknowledgment to Raja Bhaiya
+
+STEP 6: Build Scenario 4 — Daily Summary
+1. Schedule (6:00 AM IST = 00:30 UTC)
+2. Google Sheets > Search Rows (today's date)
+3. Array Aggregator (count by status)
+4. WhatsApp > Send daily summary to +91 76430 81977
+
+RECOMMENDED WHATSAPP PROVIDERS for Make.com:
+- AiSensy (aisensy.com) — ₹999/month, Make.com integration
+- Wati.io — ₹1,499/month, more features
+- Both work with Indian WhatsApp Business numbers
+
+ESCALATION LOGIC:
+- 0-15 minutes: NONE (normal processing)
+- 15-30 minutes: WARNING (⚠️ gentle reminder)
+- 30-60 minutes: URGENT (🟠 ग्राहक रद्द कर सकता है!)
+- 60+ minutes: CRITICAL (🔴 तुरंत जवाब दें!)
+
+Support: Raja Bhaiya — +91 76430 81977
+🕉️ Har Har Mahadev — DevgharCabs`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([guide], { type: 'text/plain' }));
+  a.download = 'DevgharCabs_Make_Setup_Guide.txt';
+  a.click();
+  showToast('Setup Guide Downloaded', 'Check your Downloads folder', 'success');
+}
+</script>
+</body>
+</html>
