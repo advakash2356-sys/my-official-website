@@ -11,7 +11,7 @@ Official website and booking platform for DevgharCabs, serving Baidyanath Dham, 
   - Warning (15–30 min)
   - Urgent (30–60 min)
   - Critical (60+ min)
-- **Admin Dashboard**: PIN-protected administration panel (`dashboard.html`) featuring live escalation monitoring, status filtering, search, and WhatsApp templates.
+- **Admin Dashboard**: PIN-protected administration panel (client-side PIN only, not real security) (`dashboard.html`) featuring live escalation monitoring, status filtering, search, and WhatsApp templates.
 - **Legal & Policy Pages**: DPDP-compliant Privacy Policy (`privacy.html`), Terms of Service (`terms.html`), and grievance handling (`grievance.html`).
 
 ## Tech Stack
@@ -33,7 +33,7 @@ A build step or package manager is not specified. The project consists of static
 
 - **Main Landing Page**: Open `index.html` in a web browser.
 - **Booking a Cab**: Navigate to `booking.html`, select pickup and drop-off locations, pick a date, choose a vehicle type, and submit.
-- **Admin Access**: Navigate to `dashboard.html` and enter the administrator PIN (noted as `7977` in `HOSTING_GUIDE.md` / `1108` in `dashboard.js`) to view bookings and manage escalations.
+- **Admin Access**: Navigate to `dashboard.html` and enter the administrator PIN (configured in `dashboard.js`) to view bookings and manage escalations.
 
 ## Project Structure
 
