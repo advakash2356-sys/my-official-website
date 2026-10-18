@@ -11,7 +11,7 @@ Your website folder (`Gift for bro Raja/`) contains:
 index.html          → Main landing page
 booking.html        → Cab booking form
 driver.html         → Driver registration portal
-dashboard.html      → Raja Bhaiya's admin panel (PIN: 7977)
+dashboard.html      → Raja Bhaiya's admin panel (you set your own PIN on first visit)
 privacy.html        → Privacy Policy (DPDP Compliant)
 terms.html          → Terms of Service
 css/style.css       → Shared stylesheet
@@ -71,7 +71,7 @@ Once live, share the link via:
 ## 🔐 Dashboard Access
 
 - URL: `[your-site-link]/dashboard.html`
-- PIN: **7977** (last 4 digits of Raja Bhaiya's number)
+- PIN: you choose a 4-digit PIN on first visit (stored as a salted hash in that browser only; clear site data to reset). Client-side only, so not real security.
 - Keep this URL private — don't share publicly
 
 ---

@@ -33,7 +33,7 @@ A build step or package manager is not specified. The project consists of static
 
 - **Main Landing Page**: Open `index.html` in a web browser.
 - **Booking a Cab**: Navigate to `booking.html`, select pickup and drop-off locations, pick a date, choose a vehicle type, and submit.
-- **Admin Access**: Navigate to `dashboard.html` and enter the administrator PIN (configured in `dashboard.js`) to view bookings and manage escalations.
+- **Admin Access**: Navigate to `dashboard.html` and set your own 4-digit PIN on first visit, then enter it on later visits to view bookings and manage escalations.
 
 ## Project Structure
 
@@ -52,3 +52,7 @@ A build step or package manager is not specified. The project consists of static
 ├── style.css                  # Shared stylesheet
 ├── main.js                    # Shared utility scripts
 └── devgharcabs_preview.html   # Preview page
+
+## Dashboard PIN: security note
+
+No PIN is hard-coded. On first visit you set a PIN, stored as a salted SHA-256 hash in your browser's `localStorage` (needs HTTPS or localhost for Web Crypto). This is **client-side only and not real security**: anyone with access to the browser or its dev tools can bypass or reset it, and booking data also lives client-side. For production use server-side authentication.

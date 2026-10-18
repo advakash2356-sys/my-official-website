@@ -4,7 +4,24 @@
  */
 
 // ===== DASHBOARD PIN =====
-const DASHBOARD_PIN = '1108';
+// No PIN is stored in code. On first visit the user sets one; only a salted
+// SHA-256 hash is kept in this browser's localStorage. Client-side only: NOT real security.
+const PIN_HASH_KEY = 'dgc_pin_hash';
+const PIN_SALT_KEY = 'dgc_pin_salt';
+async function hashPin(pin, salt) {
+  const data = new TextEncoder().encode(salt + ':' + pin);
+  const buf = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function isPinSet() { return !!localStorage.getItem(PIN_HASH_KEY); }
+function updatePinPrompt() {
+  const sub = document.querySelector('#login-screen .login-sub');
+  const hint = document.querySelector('#login-screen .pin-hint');
+  if (!isPinSet()) {
+    if (sub) sub.textContent = 'First visit: choose a 4-digit PIN to protect this dashboard.';
+    if (hint) hint.textContent = 'This PIN is saved (hashed) only in this browser.';
+  }
+}
 let isAuthenticated = false;
 let activeFilter = 'all';
 let searchQuery = '';
@@ -17,6 +34,7 @@ function checkAuth() {
   else { showLoginScreen(); }
 }
 function showLoginScreen() {
+  updatePinPrompt();
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('dashboard-main').style.display = 'none';
 }
@@ -26,9 +44,20 @@ function showDashboard() {
   loadDashboard();
   startEscalationMonitor();
 }
-function submitPin() {
+async function submitPin() {
   const pin = document.getElementById('pin-input').value;
-  if (pin === DASHBOARD_PIN) {
+  let ok = false;
+  if (!isPinSet()) {
+    if (/^\d{4}$/.test(pin)) {
+      const salt = Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b => b.toString(16).padStart(2, '0')).join('');
+      localStorage.setItem(PIN_SALT_KEY, salt);
+      localStorage.setItem(PIN_HASH_KEY, await hashPin(pin, salt));
+      ok = true;
+    }
+  } else {
+    ok = (await hashPin(pin, localStorage.getItem(PIN_SALT_KEY) || '')) === localStorage.getItem(PIN_HASH_KEY);
+  }
+  if (ok) {
     sessionStorage.setItem('dgc_admin_auth', 'true');
     isAuthenticated = true;
     document.getElementById('pin-input').classList.add('success');
